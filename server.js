@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const formationRoutes = require('./routes/formations.route');
+const formationRoutes = require('./routes/routes');
 
 
 const server = express();
@@ -14,6 +14,6 @@ server.use(express.urlencoded({ extended: false }));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'public')));
 
-server.use('/formations', formationRoutes);
+server.use('', formationRoutes);
 
 module.exports = server;
