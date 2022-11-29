@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const passport = require("passport");
+const session = require("express-session");
 
 
 const db = require("./models/index");
@@ -24,8 +26,15 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cookieParser());
 server.use(express.static(path.join(__dirname, 'public')));
+server.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+server.use(passport.initialize());
+server.use(passport.session());
+require("./config/passport")(passport);
 
-
-server.use('', routes);
+server.use('/api', routes);
 
 module.exports = server;
