@@ -5,6 +5,7 @@ const FormationController = require("../controllers/formations.controller");
 const UserController = require("../controllers/users.controller");
 const AccountController = require("../controllers/accounts.controller");
 
+router.post('/auth', AccountController.login);
 
 router.get('/formations', FormationController.getAllFormations);
 router.post('/formations/add',FormationController.addFormation );
