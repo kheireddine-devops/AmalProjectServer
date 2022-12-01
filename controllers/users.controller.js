@@ -15,7 +15,12 @@ const getAllUsers = (req,res,next) => {
 }
 
 const getAllDoctors = (req,res,next) => {
-    res.send("GET ALL DOCTORS");
+    models.medecin.findAll()
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+        res.status(500).send(error);
+    });
 }
 
 const getAllBeneficiers = (req,res,next) => {
@@ -30,20 +35,63 @@ const getAllBenevoles = (req,res,next) => {
     res.send("GET ALL BENEVOLES");
 }
 
-const existsUserByUsername =  (req,res,next) => {
-    const _username = req.body.username;
-    if (_username !== undefined) {
+const existsDoctorByCIN = (req,res,next) => {
+    const _cin = req.body.cin;
+    if (_cin !== undefined) {
         const query = {};
-        query.login = { [Op.eq] : _username };
-        models.compte.count({
+        query.cin = { [Op.eq] : _cin };
+        models.medecin.count({
             where: query
         }).then(result => {
             res.status(200).send(result !== 0);
         }).catch((error) => {
             res.status(500).send(error);
         });
-    } else {
-        next();
+    }
+}
+
+const existsDoctorByMatricule = (req,res,next) => {
+    const _matricule = req.body.matricule;
+    if (_matricule !== undefined) {
+        const query = {};
+        query.matricule = { [Op.eq] : _matricule };
+        models.medecin.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
+const existsOrganizationByMatricule = (req,res,next) => {
+    const _matricule = req.body.matricule;
+    if (_matricule !== undefined) {
+        const query = {};
+        query.matricule_fiscale = { [Op.eq] : _matricule };
+        models.organisation.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
+const existsBeneficierByCarteHandicapNumber = (req,res,next) => {
+    const _carteHandicapNumber = req.body.carteHandicapNumber;
+    if (_carteHandicapNumber !== undefined) {
+        const query = {};
+        query.carte_handicap = { [Op.eq] : _carteHandicapNumber };
+        models.beneficier.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
     }
 }
 
@@ -53,5 +101,8 @@ module.exports = {
     getAllBeneficiers,
     getAllOrganizations,
     getAllBenevoles,
-    existsUserByUsername
+    existsDoctorByCIN,
+    existsDoctorByMatricule,
+    existsOrganizationByMatricule,
+    existsBeneficierByCarteHandicapNumber
 }
