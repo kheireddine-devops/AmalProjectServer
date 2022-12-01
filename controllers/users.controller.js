@@ -3,56 +3,55 @@ const db = require("./../models/index");
 const {Op} = require("sequelize");
 const models = initModels(db.sequelize);
 
-const addDoctor = (req,res,next) => {
+const addDoctor = async (req,res,next) => {
 
-    const _account = req.body.account;
-    _account.id_compte = undefined;
-    _account.role = "ROLE_DOCTOR";
-    _account.status = "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL";
+    try {
+        const result = await db.sequelize.transaction(async transaction => {
 
-    const _accountModel = new models.compte(_account);
+            const _account = {
+                id_compte : undefined,
+                role : "ROLE_DOCTOR",
+                status : "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL",
+                username : req.body.account.username,
+                password : req.body.account.password,
+                email : req.body.account.email,
+                phone : req.body.account.phone,
+            }
 
-    _accountModel.save()
-        .then(accountResult => {
+            const _accountModel = await models.compte.create(_account, { transaction});
 
             const _user = {
-                id_user: accountResult.id_compte,
+                id_user: _accountModel.id_compte,
                 nom: req.body.firstname,
                 prenom: req.body.lastname,
                 date_naissance: req.body.dateOfBirth,
                 sexe: req.body.gender,
                 adresse: req.body.address.city
             }
-            const _userModel = new models.user(_user);
-            _userModel.save()
-                .then(userResult => {
-                    const _doctor = {
-                        id_user: accountResult.id_compte,
-                        cin : req.body.cin,
-                        assurance: req.body.assurance.join(","),
-                        matricule: req.body.matricule,
-                        specialite: req.body.specialty
-                    }
-                    console.log(_doctor);
-                    const _doctorModel = new models.medecin(_doctor);
-                    _doctorModel.save()
-                        .then(doctorResult => {
-                            res.status(200).send({
-                                user: userResult,
-                                account: accountResult,
-                                doctor: doctorResult
-                            });
-                        })
-                        .catch((error) => {
-                            res.status(500).send(error);
-                        });
-                })
-                .catch(error => {
-                    res.status(500).send(error);
-                })
-        }).catch((error) => {
-        res.status(500).send(error);
-    });
+
+            const _userModel = await models.user.create(_user, { transaction});
+
+            const _doctor = {
+                id_user: _accountModel.id_compte,
+                cin : req.body.cin,
+                assurance: req.body.assurance.join(","),
+                matricule: req.body.matricule,
+                specialite: req.body.specialty
+            }
+
+            const _doctorModel = await models.medecin.create(_doctor, { transaction });
+
+            return {
+                user: _userModel,
+                account: _accountModel,
+                doctor: _doctorModel
+            }
+        })
+        res.status(201).send(result);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+
 }
 
 const getAllUsers = (req,res,next) => {
