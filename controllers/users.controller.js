@@ -79,7 +79,10 @@ const getAllBeneficiers = (req,res,next) => {
 }
 
 const getAllOrganizations = (req,res,next) => {
-    res.send("GET ALL ORGANIZATIONS");
+    db.organisation.findAll()
+    .then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+    //res.send("GET ALL ORGANIZATIONS");
 }
 
 const getAllBenevoles = (req,res,next) => {
