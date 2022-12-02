@@ -7,6 +7,7 @@ const AccountController = require("../controllers/accounts.controller");
 const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
+const DemandeAideController = require("../controllers/commentaireaide.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 router.post('/auth', AccountController.login);
@@ -36,6 +37,11 @@ router.get('/demande/get/:id',DemandeController.getDemandeById );
 router.post('/demande/add',DemandeController.addDemande );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
+
+router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
+router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
+router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
+router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 
 // Routes Users
 router.get('/accounts', AccountController.getAllAccounts);

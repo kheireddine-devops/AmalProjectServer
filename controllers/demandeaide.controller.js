@@ -1,5 +1,4 @@
 var express = require('express');
-var route = express.Router()
 var db = require('../models');
 
 const addDemande = function(req,res,next){
@@ -8,7 +7,7 @@ const addDemande = function(req,res,next){
         sujet:req.body.sujet,
         nombre:req.body.nombre,
         contenue:req.body.contenue,
-        date_publication:req.body.date_publication,
+        date_publication:Date.now(),
         image:req.body.image,
         Status:req.body.Status,
         id_user:req.body.id_user
