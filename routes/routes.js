@@ -55,7 +55,7 @@ router.get('/benevoles', UserController.getAllBenevoles);
 router.get('/beneficiers', UserController.getAllBeneficiers);
 
 
-router.all('*', AuthMiddleware.IsAuth);
+router.all('', AuthMiddleware.IsAuth);
 
 
 

@@ -1,4 +1,3 @@
-const { next } = require('cli');
 var express = require('express');
 var route = express.Router()
 var db = require('../models');
@@ -11,7 +10,8 @@ const addDemande = function(req,res,next){
         contenue:req.body.contenue,
         date_publication:req.body.date_publication,
         image:req.body.image,
-        status:req.body.status,
+        Status:req.body.Status,
+        id_user:req.body.id_user
 
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
@@ -38,7 +38,8 @@ const updateDemande = function (req,res,next){
         contenue:req.body.contenue,
         date_publication:req.body.date_publication,
         image:req.body.image,
-        status:req.body.status,
+        Status:req.body.Status,
+        id_user:req.body.id_user
 
     },{where:{id_demande_aide:req.params.id}}).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
