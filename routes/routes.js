@@ -6,6 +6,8 @@ const UserController = require("../controllers/users.controller");
 const AccountController = require("../controllers/accounts.controller");
 const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
+const DemandeController = require("../controllers/demandeaide.controller");
+const DemandeAideController = require("../controllers/commentaireaide.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 router.post('/auth', AccountController.login);
@@ -29,6 +31,18 @@ router.post('/candidature/add',CandidatureController.addCandidature );
 router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
 router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
 
+//Routes Ameni
+router.get('/demandeaides',DemandeController.getDemande );
+router.get('/demande/get/:id',DemandeController.getDemandeById );
+router.post('/demande/add',DemandeController.addDemande );
+router.put('/demande/edit/:id',DemandeController.updateDemande );
+router.delete('/demande/delete/:id', DemandeController.deleteDemande);
+
+router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
+router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
+router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
+router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
+
 // Routes Users
 router.get('/accounts', AccountController.getAllAccounts);
 router.get('/accounts/:id', AccountController.getAccountByID);
@@ -47,7 +61,7 @@ router.get('/benevoles', UserController.getAllBenevoles);
 router.get('/beneficiers', UserController.getAllBeneficiers);
 
 
-router.all('*', AuthMiddleware.IsAuth);
+router.all('', AuthMiddleware.IsAuth);
 
 
 
