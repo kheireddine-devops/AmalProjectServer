@@ -6,6 +6,7 @@ const UserController = require("../controllers/users.controller");
 const AccountController = require("../controllers/accounts.controller");
 const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
+const DemandeController = require("../controllers/demandeaide.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 router.post('/auth', AccountController.login);
@@ -28,6 +29,13 @@ router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById
 router.post('/candidature/add',CandidatureController.addCandidature );
 router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
 router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
+
+//Routes Ameni
+router.get('/demandeaides',DemandeController.getDemande );
+router.get('/demande/get/:id',DemandeController.getDemandeById );
+router.post('/demande/add',DemandeController.addDemande );
+router.put('/demande/edit/:id',DemandeController.updateDemande );
+router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 // Routes Users
 router.get('/accounts', AccountController.getAllAccounts);
