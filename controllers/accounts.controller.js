@@ -1,7 +1,9 @@
 const initModels = require("./../models/init-models");
 const db = require("./../models/index");
-const {Op} = require("sequelize");
+
 const models = initModels(db.sequelize);
+
+const {Op} = require("sequelize");
 
 const { createHash } = require('node:crypto');
 const JWT = require("jsonwebtoken");
@@ -65,11 +67,71 @@ const getAllAccounts = (req,res,next) => {
     });
 };
 
+const getAccountByID =  (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.compte.findByPk(_id).then(result => {
+            res.send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+};
+
+const existsAccountByUsername = (req,res,next) => {
+    const _username = req.body.username;
+    if (_username !== undefined) {
+        const query = {};
+        query.username = { [Op.eq] : _username };
+        models.compte.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
+const existsAccountByEmail = (req,res,next) => {
+    const _email = req.body.email;
+    if (_email !== undefined) {
+        const query = {};
+        query.email = { [Op.eq] : _email };
+        models.compte.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
+const existsAccountByPhone = (req,res,next) => {
+    const _phone = req.body.phone;
+    if (_phone !== undefined) {
+        const query = {};
+        query.phone = { [Op.eq] : _phone };
+        models.compte.count({
+            where: query
+        }).then(result => {
+            res.status(200).send(result !== 0);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
 const crypt = (content) => {
     return createHash('sha256').update(content).digest('hex')
 }
 
 module.exports = {
     login,
+    getAccountByID,
+    existsAccountByUsername,
+    existsAccountByEmail,
+    existsAccountByPhone,
     getAllAccounts
 }
