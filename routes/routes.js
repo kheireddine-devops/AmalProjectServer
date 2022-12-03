@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
+
+
 const FormationController = require("../controllers/formations.controller");
+const playlistsController = require("../controllers/playlists.controller");
+const VideoController = require("../controllers/videos.controller");
+const ProduitController = require("../controllers/Produits.controller");
+const AvisController = require("../controllers/Avis.controller");
 const UserController = require("../controllers/users.controller");
 const AccountController = require("../controllers/accounts.controller");
 const EmploiController = require("../controllers/emplois.controller");
@@ -12,10 +18,45 @@ const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 router.post('/auth', AccountController.login);
 
-router.get('/formations', FormationController.getAllFormations);
-router.post('/formations/add',FormationController.addFormation );
+//route  annoce formations (asma)
+router.get('/formations/', FormationController.getAllFormations);
+router.get('/formations/get/:id', FormationController.getFormationById);
+router.post('/formations/add/',FormationController.addFormation );
 router.put('/formations/edit/:id', FormationController.editFormation);
 router.delete('/formations/delete/:id', FormationController.deleteFormation);
+
+
+//route des  playliste  (asma)
+
+router.get('/playlists/', playlistsController.getAllPlaylists);//include id-compte
+router.get('/playlist/get/:id', playlistsController.getPlaylist);//include compte
+router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
+router.put('/playlists/edit/:id', playlistsController.editPlaylist);//include compte
+router.delete('/playlists/delete/:id', playlistsController.deletePlaylist);//cascade dans le model
+
+
+//route des video d'une playliste  (asma)
+
+
+router.post('/playlists/video/add',VideoController.uploadVideo );//include playliste
+router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//cascade
+
+/******************************Produit ***********************************/
+
+router.get('/produits', ProduitController.getAllProduits);
+router.get('/produit/:id',ProduitController.getOneProduit);
+router.post('/createproduit',ProduitController.addProduit );
+router.put('/produit/update/:id', ProduitController.editProduit);
+router.delete('/produit/delete/:id', ProduitController.deleteProduit);
+
+
+/******************************Avis***********************************/
+
+router.get('/avis', AvisController.getAllAvis);
+router.post('/createavis',AvisController.addAvis );
+router.put('/avis/update/:id', AvisController.editAvis);
+router.delete('/avis/delete/:id', AvisController.deleteAvis);
+
 
 
 //route sabrine
@@ -61,7 +102,7 @@ router.get('/benevoles', UserController.getAllBenevoles);
 router.get('/beneficiers', UserController.getAllBeneficiers);
 
 
-router.all('', AuthMiddleware.IsAuth);
+router.all('*', AuthMiddleware.IsAuth);
 
 
 
