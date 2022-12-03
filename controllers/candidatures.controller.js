@@ -1,19 +1,10 @@
 const db=require('../models')
 const Joi=require('joi')
 const {Op}=require('sequelize')
-const CandidatureSchema=Joi.object({
-    id_emploi:Joi.required(),
-    id_compte:Joi.required(),
-    date_candidature:Joi.date().required(),
-    url_cv:Joi.string().required(),
-    niveau:Joi.string().required(),
-    message:Joi.string().required(),
-
- })
-
+const validator=require('../validators/validator')
 
  const addCandidature = function(req, res, next) {
-    const joiError=CandidatureSchema.validate(req.body)
+    const joiError=validator.CandidatureSchema.validate(req.body)
     if(joiError.error){
         return res.status(400).send(joiError.error.details[0].message)
     }
@@ -42,6 +33,10 @@ const getCandidatureById = function(req, res, next) {
 
 
 const editCandidature = function(req, res, next) {
+    const joiError=validator.CandidatureSchema.validate(req.body)
+    if(joiError.error){
+        return res.status(400).send(joiError.error.details[0].message)
+    }
 
     db.candidatures.update(req.body,{where:{[Op.and]:[{id_emploi:req.params.ide},{id_compte:req.params.idc }] }})
     .then((response)=>res.status(200).send(response))
@@ -56,7 +51,7 @@ const deleteCandidature = function(req, res, next) {
         .catch((err)=>res.status(400).send(err))
     
 
-    res.send("DELETE Emploi BY ID " + req.params.id);
+    res.send("DELETE Emploi BY ID " + req.params.ide);
 }
 module.exports = {
     getAllCandidatures,

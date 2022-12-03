@@ -1,18 +1,12 @@
 const db=require('../models')
-const Joi=require('joi')
-const Schema=Joi.object({
-    titre_emploi:Joi.string().required(),
-    descriptif_emploi:Joi.string().required(),
-    secteur:Joi.string().required(),
-    ref_emploi:Joi.string().required(),
-    date_expiration:Joi.date().required(),
-    id_compte:Joi.required(),
-
- })
-
-
+const jwt_decode = require('jwt-decode');
+const validator=require('../validators/validator')
  const addEmploi = function(req, res, next) {
-    const joiError=Schema.validate(req.body)
+    const role = jwt_decode(req.header('authorization')).role;
+    if(role=='ROLE_ORGANIZATION'){
+        req.body['id_compte'] = jwt_decode(req.header('authorization')).sub
+    }
+    const joiError=validator.EmploiSchema.validate(req.body)
     if(joiError.error){
         return res.status(400).send(joiError.error.details[0].message)
     }
@@ -38,21 +32,24 @@ const getEmploisById = function(req, res, next) {
 
 
 const editEmploi = function(req, res, next) {
-
+    const joiError=validator.EmploiSchema.validate(req.body)
+    console.log(req.params.id)
+    if(joiError.error){
+        return res.status(400).send(joiError.error.details[0].message)
+    }
     db.emplois.update(req.body,{where:{id_emploi:req.params.id}})
     .then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
-    res.send("EDIT Emploi BY ID " + req.params.id);
+    //res.send("EDIT Emploi BY ID " + req.params.id);
 }
 
 const deleteEmploi = function(req, res, next) {
         db.emplois.destroy({where:{id_emploi:req.params.id}})
-        .then((response)=>res.status(202).send(response))
+        .then((response)=>res.status(200).send(JSON.stringify("deleted")))
         .catch((err)=>res.status(400).send(err))
-    
 
-    res.send("DELETE Emploi BY ID " + req.params.id);
+    //res.send("DELETE Emploi BY ID " + req.params.id);
 }
 module.exports = {
     getAllEmplois,
