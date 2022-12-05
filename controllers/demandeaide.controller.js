@@ -52,7 +52,7 @@ const addDemande = function(req,res,next){
 
 }
 const getDemandeById = function (req,res,next){
-    db.demandeaide.findOne({where:{id_demande_aide:req.params.id},include:[db.commentaireaide]
+    db.demandeaide.findOne({where:{id_demande_aide:req.params.id}
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
@@ -70,9 +70,10 @@ const updateDemande = function (req,res,next){
         sujet:req.body.sujet,
         nombre:req.body.nombre,
         contenue:req.body.contenue,
-        date_publication:req.body.date_publication,
+        date_publication:Date.now(),
         image:req.body.image,
         Status:req.body.Status,
+        id_user:3
         
 
     },{where:{id_demande_aide:req.params.id}}).then((response)=>res.status(200).send(response))
