@@ -112,6 +112,73 @@ const getAllBenevoles = (req,res,next) => {
     });
 }
 
+const getUserByID = (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.user.findByPk(_id, {
+            attributes: ['id_user',['nom','firstname'],['prenom','lastname'],['date_naissance','dateOfBirth'],['sexe','gender'],['adresse','address']]
+        }).then(result => {
+            console.log(result)
+            console.log(eval(result.address));
+            res.status(200).send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+}
+
+const getOrganizationByID = (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.organisation.findByPk(_id, {
+            attributes: ['id_compte',['matricule_fiscale','matriculeFiscale'],['nom','name'],['forme_juridique','formeJuridique'],['adresse','address']]
+        }).then(result => {
+            res.send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+}
+
+const getDoctorByID =  (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.medecin.findByPk(_id,{
+            attributes: ['id_user',['matricule','matricule'],['specialite','specialty'],['cin','cin'],['assurance','assurance']]
+        }).then(result => {
+            res.send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+}
+
+const getBenevoleByID =  (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.benevole.findByPk(_id, {
+            attributes: ['id_user','profession']
+        }).then(result => {
+            res.send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+}
+
+const getBeneficierByID =  (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.beneficier.findByPk(_id, {
+            attributes: ['id_user',['carte_handicap','carteHandicapNumber'],['date_expiration','dateExpiration']]
+        }).then(result => {
+            res.send(result);
+        }).catch((error) => {
+            next(error);
+        });
+    }
+}
+
 const existsDoctorByCIN = (req,res,next) => {
     const _cin = req.body.cin;
     if (_cin !== undefined) {
@@ -179,6 +246,11 @@ module.exports = {
     getAllBeneficiers,
     getAllOrganizations,
     getAllBenevoles,
+    getUserByID,
+    getDoctorByID,
+    getBeneficierByID,
+    getOrganizationByID,
+    getBenevoleByID,
     existsDoctorByCIN,
     existsDoctorByMatricule,
     existsOrganizationByMatricule,
