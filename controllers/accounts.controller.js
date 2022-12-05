@@ -58,7 +58,8 @@ const login =  (req,res,next) => {
 
 const getAllAccounts = (req,res,next) => {
     models.compte.findAll({
-        include: ["user", "organisation"]
+        include: ["user", "organisation"],
+        attributes: ['id_compte','username','role','status','phone','email','photo']
     })
         .then(result => {
             res.status(200).send(result);
@@ -70,7 +71,7 @@ const getAllAccounts = (req,res,next) => {
 const getAccountByID =  (req,res,next) => {
     const _id = req.params.id;
     if(_id !== undefined) {
-        models.compte.findByPk(_id).then(result => {
+        models.compte.findByPk(_id, { attributes: ['id_compte','username','role','status','phone','email','photo'] }).then(result => {
             res.send(result);
         }).catch((error) => {
             next(error);
@@ -133,5 +134,6 @@ module.exports = {
     existsAccountByUsername,
     existsAccountByEmail,
     existsAccountByPhone,
-    getAllAccounts
+    getAllAccounts,
+    crypt
 }
