@@ -58,6 +58,13 @@ const getDemandeById = function (req,res,next){
 
 
 }
+const searchDemande = function (req,res,next){
+    db.demandeaide.findOne({where:{typeDemande:req.params.type}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
 const getDemande = function(req,res,next){
     db.demandeaide.findAll().then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
@@ -92,5 +99,6 @@ module.exports = {
     getDemandeById,
     getDemande,
     updateDemande,
-    deleteDemande
+    deleteDemande,
+    searchDemande
 }

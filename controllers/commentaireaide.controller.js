@@ -20,6 +20,20 @@ const getCommentaireaide = function(req,res,next){
 
 
 }
+const getCommentaireById = function (req,res,next){
+    db.commentaireaide.findOne({where:{idCommentaire:req.params.id}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
+const getCommentaireDemande = function (req,res,next){
+    db.commentaireaide.findAll({where:{idDemandeAide:req.params.iddemande}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
 const updateCommentaireaide = function (req,res,next){
     db.commentaireaide.update({
         txtCommentaire:req.body.txtCommentaire,
@@ -45,7 +59,8 @@ module.exports = {
     addCommentaireaide,
     getCommentaireaide,
     updateCommentaireaide,
-    deleteCommentaireaide
-
+    deleteCommentaireaide,
+    getCommentaireDemande,
+    getCommentaireById
    
 }
