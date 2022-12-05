@@ -32,6 +32,7 @@ router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandi
 // Routes Users
 router.get('/accounts', AccountController.getAllAccounts);
 router.get('/accounts/:id', AccountController.getAccountByID);
+router.delete('/accounts/:id', AccountController.deleteAccountByID);
 router.post('/accounts/exist-by-username', AccountController.existsAccountByUsername);
 router.post('/accounts/exist-by-email', AccountController.existsAccountByEmail);
 router.post('/accounts/exist-by-phone', AccountController.existsAccountByPhone);
@@ -40,15 +41,27 @@ router.post('/doctors/exist-by-matricule', UserController.existsDoctorByMatricul
 router.post('/organizations/exist-by-matricule', UserController.existsOrganizationByMatricule);
 router.post('/beneficiers/exist-by-catre', UserController.existsBeneficierByCarteHandicapNumber);
 router.get('/users', UserController.getAllUsers);
+router.get('/users/:id', UserController.getUserByID);
 router.post('/doctors', UserController.addDoctor);
+router.put('/doctors/:id', UserController.editDoctor);
 router.get('/doctors', UserController.getAllDoctors);
+router.get('/doctors/:id', UserController.getDoctorByID);
 router.get('/organizations', UserController.getAllOrganizations);
+router.post('/organizations', UserController.addOrganization);
+router.put('/organizations/:id', UserController.editOrganization);
+router.get('/organizations/:id', UserController.getOrganizationByID);
 router.get('/benevoles', UserController.getAllBenevoles);
+router.post('/benevoles', UserController.addBenevole);
+router.put('/benevoles/:id', UserController.editBenevole);
+router.get('/benevoles/:id', UserController.getBenevoleByID);
 router.get('/beneficiers', UserController.getAllBeneficiers);
+router.post('/beneficiers', UserController.addBeneficier);
+router.put('/beneficiers/:id', UserController.editBeneficier);
+router.get('/beneficiers/:id', UserController.getBeneficierByID);
 
 
 router.all('*', AuthMiddleware.IsAuth);
 
-
+router.get('/auth/doctors', UserController.getAllDoctors);
 
 module.exports = router;
