@@ -55,6 +55,141 @@ const addDoctor = async (req,res,next) => {
 
 }
 
+const addBeneficier = async (req,res,next) => {
+
+    try {
+        const result = await db.sequelize.transaction(async transaction => {
+
+            const _account = {
+                id_compte : undefined,
+                role : "ROLE_BENEFICIER",
+                status : "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL",
+                username : req.body.account.username,
+                password : crypt(req.body.account.password),
+                email : req.body.account.email,
+                phone : req.body.account.phone,
+            }
+
+            const _accountModel = await models.compte.create(_account, { transaction});
+
+            const _user = {
+                id_user: _accountModel.id_compte,
+                nom: req.body.firstname,
+                prenom: req.body.lastname,
+                date_naissance: req.body.dateOfBirth,
+                sexe: req.body.gender,
+                adresse: JSON.stringify(req.body.address)
+            }
+
+            const _userModel = await models.user.create(_user, { transaction});
+
+            const _beneficier = {
+                id_user: _accountModel.id_compte,
+                carte_handicap: req.body.carteHandicapNumber,
+                date_expiration: req.body.dateExpiration
+            }
+
+            const _beneficierModel = await models.beneficier.create(_beneficier, { transaction });
+
+            return {
+                user: _userModel,
+                account: _accountModel,
+                beneficier: _beneficierModel
+            }
+        })
+        res.status(201).send(result);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+
+}
+
+const addBenevole = async (req,res,next) => {
+
+    try {
+        const result = await db.sequelize.transaction(async transaction => {
+
+            const _account = {
+                id_compte : undefined,
+                role : "ROLE_BENEVOLE",
+                status : "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL",
+                username : req.body.account.username,
+                password : crypt(req.body.account.password),
+                email : req.body.account.email,
+                phone : req.body.account.phone,
+            }
+
+            const _accountModel = await models.compte.create(_account, { transaction});
+
+            const _user = {
+                id_user: _accountModel.id_compte,
+                nom: req.body.firstname,
+                prenom: req.body.lastname,
+                date_naissance: req.body.dateOfBirth,
+                sexe: req.body.gender,
+                adresse: JSON.stringify(req.body.address)
+            }
+
+            const _userModel = await models.user.create(_user, { transaction});
+
+            const _benevole = {
+                id_user: _accountModel.id_compte,
+                profession: req.body.profession,
+            }
+
+            const _benevoleModel = await models.benevole.create(_benevole, { transaction });
+
+            return {
+                user: _userModel,
+                account: _accountModel,
+                benevole: _benevoleModel
+            }
+        })
+        res.status(201).send(result);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+
+}
+
+const addOrganization = async (req,res,next) => {
+    try {
+        const result = await db.sequelize.transaction(async transaction => {
+
+            const _account = {
+                id_compte : undefined,
+                role : "ROLE_ORGANIZATION",
+                status : "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL",
+                username : req.body.account.username,
+                password : crypt(req.body.account.password),
+                email : req.body.account.email,
+                phone : req.body.account.phone,
+            }
+
+            const _accountModel = await models.compte.create(_account, { transaction});
+
+
+            const _organization = {
+                id_compte: _accountModel.id_compte,
+                nom: req.body.name,
+                matricule_fiscale: req.body.matriculeFiscale,
+                forme_juridique: req.body.formeJuridique,
+                adresse: JSON.stringify(req.body.address)
+            }
+
+            const _organizationModel = await models.organisation.create(_organization, { transaction });
+
+            return {
+                account: _accountModel,
+                organization: _organizationModel
+            }
+        })
+        res.status(201).send(result);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+}
+
 const getAllUsers = (req,res,next) => {
     models.user.findAll({
         include: ["medecin","beneficier","benevole"],
@@ -241,6 +376,9 @@ const existsBeneficierByCarteHandicapNumber = (req,res,next) => {
 
 module.exports = {
     addDoctor,
+    addBeneficier,
+    addBenevole,
+    addOrganization,
     getAllUsers,
     getAllDoctors,
     getAllBeneficiers,
