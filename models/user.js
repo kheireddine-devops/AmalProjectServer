@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     adresse: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.TEXT,
       allowNull: false
     }
   }, {
