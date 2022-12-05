@@ -190,6 +190,186 @@ const addOrganization = async (req,res,next) => {
     }
 }
 
+const editDoctor = async (req,res,next) => {
+
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        try {
+            const result = await db.sequelize.transaction(async transaction => {
+
+                const _updatedAccount = {
+                    username : req.body.account.username,
+                    password : (req.body.account.password) ? crypt(req.body.account.password): undefined,
+                    email : req.body.account.email,
+                    phone : req.body.account.phone,
+                    photo: req.body.account.photo
+                }
+
+                const _accountModel = await models.compte.update(_updatedAccount, { where: { id_compte : _id } , updateOnDuplicate: ["phone","email","username"] },{ transaction});
+                const _updatedUser = {
+                    id_user: _accountModel.id_compte,
+                    nom: req.body.firstname,
+                    prenom: req.body.lastname,
+                    date_naissance: req.body.dateOfBirth,
+                    sexe: req.body.gender,
+                    adresse: JSON.stringify(req.body.address)
+                }
+
+                const _userModel = await models.user.update(_updatedUser, { where: { id_user : _id } }, { transaction });
+
+                const _updatedDoctor = {
+                    cin : req.body.cin,
+                    assurance: req.body.assurance.join(","),
+                    matricule: req.body.matricule,
+                    specialite: req.body.specialty
+                }
+
+                const _doctorModel = await models.medecin.update(_updatedDoctor, { where: { id_user : _id } , updateOnDuplicate: ["cin","matricule"] } , { transaction });
+
+                return {
+                    user: _userModel,
+                    account: _accountModel,
+                    doctor: _doctorModel
+                }
+            })
+            res.status(200).send(result);
+        } catch (e) {
+            res.status(500).send(e);
+        }
+    }
+}
+
+const editBeneficier = async (req,res,next) => {
+
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        try {
+            const result = await db.sequelize.transaction(async transaction => {
+
+                const _updatedAccount = {
+                    username : req.body.account.username,
+                    password : (req.body.account.password) ? crypt(req.body.account.password): undefined,
+                    email : req.body.account.email,
+                    phone : req.body.account.phone,
+                    photo: req.body.account.photo
+                }
+
+                const _accountModel = await models.compte.update(_updatedAccount, { where: { id_compte : _id } , updateOnDuplicate: ["phone","email","username"] },{ transaction});
+                const _updatedUser = {
+                    id_user: _accountModel.id_compte,
+                    nom: req.body.firstname,
+                    prenom: req.body.lastname,
+                    date_naissance: req.body.dateOfBirth,
+                    sexe: req.body.gender,
+                    adresse: JSON.stringify(req.body.address)
+                }
+
+                const _userModel = await models.user.update(_updatedUser, { where: { id_user : _id } }, { transaction });
+
+                const _updatedBeneficier = {
+                    carte_handicap : req.body.carteHandicapNumber,
+                    date_expiration : req.body.dateExpiration
+                }
+
+                const _beneficierModel = await models.beneficier.update(_updatedBeneficier, { where: { id_user : _id } , updateOnDuplicate: ["carte_handicap"] } , { transaction });
+
+                return {
+                    user: _userModel,
+                    account: _accountModel,
+                    beneficier: _beneficierModel
+                }
+            })
+            res.status(200).send(result);
+        } catch (e) {
+            res.status(500).send(e);
+        }
+    }
+}
+
+const editBenevole = async (req,res,next) => {
+
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        try {
+            const result = await db.sequelize.transaction(async transaction => {
+
+                const _updatedAccount = {
+                    username : req.body.account.username,
+                    password : (req.body.account.password) ? crypt(req.body.account.password): undefined,
+                    email : req.body.account.email,
+                    phone : req.body.account.phone,
+                    photo: req.body.account.photo,
+                }
+
+                const _accountModel = await models.compte.update(_updatedAccount, { where: { id_compte : _id } , updateOnDuplicate: ["phone","email","username"] },{ transaction});
+                const _updatedUser = {
+                    id_user: _accountModel.id_compte,
+                    nom: req.body.firstname,
+                    prenom: req.body.lastname,
+                    date_naissance: req.body.dateOfBirth,
+                    sexe: req.body.gender,
+                    adresse: JSON.stringify(req.body.address)
+                }
+
+                const _userModel = await models.user.update(_updatedUser, { where: { id_user : _id } }, { transaction });
+
+                const _updatedBenevole = {
+                    profession : req.body.profession,
+                }
+
+                const _benevoleModel = await models.benevole.update(_updatedBenevole, { where: { id_user : _id } } , { transaction });
+
+                return {
+                    user: _userModel,
+                    account: _accountModel,
+                    benevole: _benevoleModel
+                }
+            })
+            res.status(200).send(result);
+        } catch (e) {
+            res.status(500).send(e);
+        }
+    }
+}
+
+const editOrganization = async (req,res,next) => {
+
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        try {
+            const result = await db.sequelize.transaction(async transaction => {
+
+                const _updatedAccount = {
+                    username : req.body.account.username,
+                    password : (req.body.account.password) ? crypt(req.body.account.password): undefined,
+                    email : req.body.account.email,
+                    phone : req.body.account.phone,
+                    photo: req.body.account.photo,
+                }
+
+                const _accountModel = await models.compte.update(_updatedAccount, { where: { id_compte : _id } , updateOnDuplicate: ["phone","email","username"] },{ transaction});
+                const _updatedOrganization = {
+                    id_compte: _accountModel.id_compte,
+                    nom: req.body.name,
+                    matricule_fiscale: req.body.matriculeFiscale,
+                    forme_juridique: req.body.formeJuridique,
+                    adresse: JSON.stringify(req.body.address)
+                }
+
+                const _organizationModel = await models.organisation.update(_updatedOrganization, { where: { id_compte : _id } , updateOnDuplicate: ["matricule_fiscale"] }, { transaction });
+
+                return {
+                    organization: _organizationModel,
+                    account: _accountModel,
+                }
+            })
+            res.status(200).send(result);
+        } catch (e) {
+            res.status(500).send(e);
+        }
+    }
+}
+
 const getAllUsers = (req,res,next) => {
     models.user.findAll({
         include: ["medecin","beneficier","benevole"],
@@ -379,6 +559,10 @@ module.exports = {
     addBeneficier,
     addBenevole,
     addOrganization,
+    editDoctor,
+    editBeneficier,
+    editBenevole,
+    editOrganization,
     getAllUsers,
     getAllDoctors,
     getAllBeneficiers,
