@@ -2,6 +2,7 @@ const initModels = require("./../models/init-models");
 const db = require("./../models/index");
 const {Op} = require("sequelize");
 const models = initModels(db.sequelize);
+const {crypt} = require("./accounts.controller");
 
 const addDoctor = async (req,res,next) => {
 
@@ -13,7 +14,7 @@ const addDoctor = async (req,res,next) => {
                 role : "ROLE_DOCTOR",
                 status : "STATUS_ACTIVE_NOT_VERIFIED_PHONE_VERIFIED_MAIL",
                 username : req.body.account.username,
-                password : req.body.account.password,
+                password : crypt(req.body.account.password),
                 email : req.body.account.email,
                 phone : req.body.account.phone,
             }
@@ -26,7 +27,7 @@ const addDoctor = async (req,res,next) => {
                 prenom: req.body.lastname,
                 date_naissance: req.body.dateOfBirth,
                 sexe: req.body.gender,
-                adresse: req.body.address.city
+                adresse: JSON.stringify(req.body.address)
             }
 
             const _userModel = await models.user.create(_user, { transaction});
@@ -56,7 +57,8 @@ const addDoctor = async (req,res,next) => {
 
 const getAllUsers = (req,res,next) => {
     models.user.findAll({
-        include: ["medecin","beneficier","benevole"]
+        include: ["medecin","beneficier","benevole"],
+        attributes: ['id_user',['nom','firstname'],['prenom','lastname'],['date_naissance','dateOfBirth'],['sexe','gender'],['adresse','address']]
     })
         .then(result => {
             res.status(200).send(result);
@@ -66,7 +68,10 @@ const getAllUsers = (req,res,next) => {
 }
 
 const getAllDoctors = (req,res,next) => {
-    models.medecin.findAll()
+    console.log(req.user.id)
+    models.medecin.findAll({
+        attributes: ['id_user',['matricule','matricule'],['specialite','specialty'],['cin','cin'],['assurance','assurance']]
+    })
         .then(result => {
             res.status(200).send(result);
         }).catch((error) => {
@@ -75,15 +80,36 @@ const getAllDoctors = (req,res,next) => {
 }
 
 const getAllBeneficiers = (req,res,next) => {
-    res.send("GET ALL BENEFICIERS");
+    models.beneficier.findAll({
+        attributes: ['id_user',['carte_handicap','carteHandicapNumber'],['date_expiration','dateExpiration']]
+    })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+        res.status(500).send(error);
+    });
 }
 
 const getAllOrganizations = (req,res,next) => {
-    res.send("GET ALL ORGANIZATIONS");
+    models.organisation.findAll({
+        attributes: ['id_compte',['matricule_fiscale','matriculeFiscale'],['nom','name'],['forme_juridique','formeJuridique'],['adresse','address']]
+    })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+        res.status(500).send(error);
+    });
 }
 
 const getAllBenevoles = (req,res,next) => {
-    res.send("GET ALL BENEVOLES");
+    models.benevole.findAll({
+        attributes: ['id_user','profession']
+    })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+        res.status(500).send(error);
+    });
 }
 
 const existsDoctorByCIN = (req,res,next) => {
@@ -156,5 +182,5 @@ module.exports = {
     existsDoctorByCIN,
     existsDoctorByMatricule,
     existsOrganizationByMatricule,
-    existsBeneficierByCarteHandicapNumber
+    existsBeneficierByCarteHandicapNumber,
 }
