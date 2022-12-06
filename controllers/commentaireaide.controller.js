@@ -1,5 +1,6 @@
 var express = require('express');
 var db = require('../models');
+const {Op, QueryTypes} = require("sequelize");
 const addCommentaireaide = function(req,res,next){
     db.commentaireaide.create({
         txtCommentaire:req.body.txtCommentaire,
@@ -15,9 +16,12 @@ const addCommentaireaide = function(req,res,next){
 
 }
 const getCommentaireaide = function(req,res,next){
-    db.commentaireaide.findAll().then((response)=>res.status(200).send(response))
-    .catch((err)=>res.status(400).send(err))
-
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM commentaireaide AS D JOIN compte AS C ON C.id_compte = D.idCompte JOIN user AS U ON U.id_user = D.idCompte;", { type: QueryTypes.SELECT })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+             res.status(500).send(error);
+    });
 
 }
 const getCommentaireById = function (req,res,next){

@@ -42,7 +42,7 @@ router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
-router.get('/commentaireaides/:iddemande',DemandeAideController.getCommentaireDemande );
+router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireDemande );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
 router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 

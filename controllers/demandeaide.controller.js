@@ -53,11 +53,12 @@ const addDemande = function(req,res,next){
 
 }
 const getDemandeById = function (req,res,next){
-    db.demandeaide.findOne({where:{id_demande_aide:req.params.id}
-    }).then((response)=>res.status(200).send(response))
-    .catch((err)=>res.status(400).send(err))
-
-
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM demandeaide AS D JOIN user AS U ON U.id_user = D.id_user JOIN compte AS C ON C.id_compte = D.id_user where D.id_demande_aide=:id;", { replacements: { id: req.params.id },type: QueryTypes.SELECT })
+    .then(result => {
+        res.status(200).send(result);
+    }).catch((error) => {
+         res.status(500).send(error);
+});
 }
 const searchDemande = function (req,res,next){
     db.demandeaide.findOne({where:{typeDemande:req.params.type}
