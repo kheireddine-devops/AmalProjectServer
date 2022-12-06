@@ -3,12 +3,12 @@ var db = require('../models');
 const addCommentaireaide = function(req,res,next){
     db.commentaireaide.create({
         txtCommentaire:req.body.txtCommentaire,
-        dateCommentaire:Date.now(),
+        dateCommentaire :Date.now(),
         like : 0,
-        status :"non publié",
-        idCompte:req.body.idCompte,
-        idDemandeAide: req.body.idDemandeAide
-
+        status:req.body.status,
+        idCompte :1,
+        idDemandeAide:req.body.idDemandeAide,
+    
 
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))

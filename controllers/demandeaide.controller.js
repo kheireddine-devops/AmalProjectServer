@@ -1,5 +1,6 @@
 var express = require('express');
 const db = require('../models');
+const {Op, QueryTypes} = require("sequelize");
 const Joi =require('joi');
 // validation Scheme
 
@@ -65,11 +66,14 @@ const searchDemande = function (req,res,next){
 
 
 }
-const getDemande = function(req,res,next){
-    db.demandeaide.findAll().then((response)=>res.status(200).send(response))
-    .catch((err)=>res.status(400).send(err))
 
-
+const getDemande = (req,res,next) => {
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM demandeaide AS D JOIN user AS U ON U.id_user = D.id_user JOIN compte AS C ON C.id_compte = D.id_user;", { type: QueryTypes.SELECT })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+             res.status(500).send(error);
+    });
 }
 const updateDemande = function (req,res,next){
     db.demandeaide.update({
