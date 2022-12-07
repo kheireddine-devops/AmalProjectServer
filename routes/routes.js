@@ -76,12 +76,15 @@ router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandi
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
+router.get('/demande/search/:type',DemandeController.searchDemande );
 router.post('/demande/add',DemandeController.addDemande );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
+router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
+router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireDemande );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
 router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 
