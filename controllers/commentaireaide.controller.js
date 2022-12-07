@@ -1,21 +1,39 @@
 var express = require('express');
 var db = require('../models');
+const {Op, QueryTypes} = require("sequelize");
 const addCommentaireaide = function(req,res,next){
     db.commentaireaide.create({
         txtCommentaire:req.body.txtCommentaire,
-        dateCommentaire:Date.now(),
+        dateCommentaire :Date.now(),
         like : 0,
-        status :"non publié",
-        idCompte:req.body.idCompte,
-        idDemandeAide: req.body.idDemandeAide
-
+        status:req.body.status,
+        idCompte :1,
+        idDemandeAide:req.body.idDemandeAide,
+    
 
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
 }
 const getCommentaireaide = function(req,res,next){
-    db.commentaireaide.findAll().then((response)=>res.status(200).send(response))
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM commentaireaide AS D JOIN compte AS C ON C.id_compte = D.idCompte JOIN user AS U ON U.id_user = D.idCompte;", { type: QueryTypes.SELECT })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+             res.status(500).send(error);
+    });
+
+}
+const getCommentaireById = function (req,res,next){
+    db.commentaireaide.findOne({where:{idCommentaire:req.params.id}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
+const getCommentaireDemande = function (req,res,next){
+    db.commentaireaide.findAll({where:{idDemandeAide:req.params.iddemande}
+    }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
 
@@ -45,7 +63,8 @@ module.exports = {
     addCommentaireaide,
     getCommentaireaide,
     updateCommentaireaide,
-    deleteCommentaireaide
-
+    deleteCommentaireaide,
+    getCommentaireDemande,
+    getCommentaireById
    
 }

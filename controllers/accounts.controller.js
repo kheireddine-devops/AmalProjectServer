@@ -58,7 +58,8 @@ const login =  (req,res,next) => {
 
 const getAllAccounts = (req,res,next) => {
     models.compte.findAll({
-        include: ["user", "organisation"]
+        include: ["user", "organisation"],
+        attributes: ['id_compte','username','role','status','phone','email','photo']
     })
         .then(result => {
             res.status(200).send(result);
@@ -70,7 +71,7 @@ const getAllAccounts = (req,res,next) => {
 const getAccountByID =  (req,res,next) => {
     const _id = req.params.id;
     if(_id !== undefined) {
-        models.compte.findByPk(_id).then(result => {
+        models.compte.findByPk(_id, { attributes: ['id_compte','username','role','status','phone','email','photo'] }).then(result => {
             res.send(result);
         }).catch((error) => {
             next(error);
@@ -123,6 +124,22 @@ const existsAccountByPhone = (req,res,next) => {
     }
 }
 
+const deleteAccountByID =  (req,res,next) => {
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.compte.destroy({ where: { id_compte: _id } }).then(result => {
+            console.log(result)
+            const data = { valid: false, count: result}
+            if(result == 1) {
+                data.valid = true;
+            }
+            res.status(200).send(data);
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+};
+
 const crypt = (content) => {
     return createHash('sha256').update(content).digest('hex')
 }
@@ -133,5 +150,7 @@ module.exports = {
     existsAccountByUsername,
     existsAccountByEmail,
     existsAccountByPhone,
-    getAllAccounts
+    getAllAccounts,
+    deleteAccountByID,
+    crypt
 }
