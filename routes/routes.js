@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Upload = require("./../config/multer");
 
 
 const FormationController = require("../controllers/formations.controller");
@@ -22,6 +23,22 @@ router.get('/formations/', FormationController.getAllFormations);
 router.get('/formations/get/:id', FormationController.getFormationById);
 router.put('/formations/edit/:id', FormationController.editFormation);
 router.delete('/formations/delete/:id', FormationController.deleteFormation);
+
+/******************************Produit ***********************************/
+
+router.get('/produits', ProduitController.getAllProduits);
+router.get('/produit/:id',ProduitController.getOneProduit);
+router.post('/createproduit',ProduitController.addProduit );
+router.put('/produit/update/:id', ProduitController.editProduit);
+router.delete('/produit/delete/:id', ProduitController.deleteProduit);
+
+
+/******************************Avis***********************************/
+
+router.get('/avis', AvisController.getAllAvis);
+router.post('/createavis',AvisController.addAvis );
+router.put('/avis/update/:id', AvisController.editAvis);
+router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 
 //route des  playliste  (asma)
@@ -73,18 +90,22 @@ router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandi
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
+router.get('/demande/search/:type',DemandeController.searchDemande );
 router.post('/demande/add',DemandeController.addDemande );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
+router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
+router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireDemande );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
 router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 
 // Routes Users
 router.get('/accounts', AccountController.getAllAccounts);
 router.get('/accounts/:id', AccountController.getAccountByID);
+router.delete('/accounts/:id', AccountController.deleteAccountByID);
 router.post('/accounts/exist-by-username', AccountController.existsAccountByUsername);
 router.post('/accounts/exist-by-email', AccountController.existsAccountByEmail);
 router.post('/accounts/exist-by-phone', AccountController.existsAccountByPhone);
@@ -96,19 +117,42 @@ router.post('/organizations/exist-by-matricule', UserController.existsOrganizati
 router.post('/beneficiers/exist-by-catre', UserController.existsBeneficierByCarteHandicapNumber);
 
 router.get('/users', UserController.getAllUsers);
+router.get('/users/:id', UserController.getUserByID);
 router.post('/doctors', UserController.addDoctor);
+router.put('/doctors/:id', UserController.editDoctor);
 router.get('/doctors', UserController.getAllDoctors);
+router.get('/doctors/:id', UserController.getDoctorByID);
 router.get('/organizations', UserController.getAllOrganizations);
+router.post('/organizations', UserController.addOrganization);
+router.put('/organizations/:id', UserController.editOrganization);
+router.get('/organizations/:id', UserController.getOrganizationByID);
 router.get('/benevoles', UserController.getAllBenevoles);
+router.post('/benevoles', UserController.addBenevole);
+router.put('/benevoles/:id', UserController.editBenevole);
+router.get('/benevoles/:id', UserController.getBenevoleByID);
 router.get('/beneficiers', UserController.getAllBeneficiers);
+router.post('/beneficiers', UserController.addBeneficier);
+router.put('/beneficiers/:id', UserController.editBeneficier);
+router.get('/beneficiers/:id', UserController.getBeneficierByID);
 
+router.get('/test/users', UserController.getAllUsers);
+
+
+router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
 
 
 router.all('*', AuthMiddleware.IsAuth);
 
 
+
 router.post('/formations/add/',FormationController.addFormation );
+
+router.get('/auth/doctors', UserController.getAllDoctors);
 
   
    
 module.exports = router;
+
+/*
+    req.file.filename
+ */
