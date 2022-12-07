@@ -46,6 +46,24 @@ const addDemande = function(req,res,next){
         date_publication:Date.now(),
         image:req.body.image,
         Status:req.body.Status,
+        id_user:1
+
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+}
+
+//add demande benif
+
+const addDemandebenif = function(req,res,next){
+    db.demandeaide.create({
+        typeDemande:req.body.typeDemande,
+        sujet:req.body.sujet,
+        nombre:req.body.nombre,
+        contenue:req.body.contenue,
+        date_publication:Date.now(),
+        image:req.body.image,
+        Status:"non publié",
         id_user:3
 
     }).then((response)=>res.status(200).send(response))
@@ -62,6 +80,28 @@ const getDemandeById = function (req,res,next){
 }
 const searchDemande = function (req,res,next){
     db.demandeaide.findOne({where:{typeDemande:req.params.type}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
+const searchDemandeById = function (req,res,next){
+    db.demandeaide.findOne({where:{id_demande_aide:req.params.id}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
+const getDemandebenif = (req,res,next) => {
+    db.demandeaide.findAll({where:{id_user:req.params.id}
+    }).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+
+}
+
+const getDemandefront = (req,res,next) => {
+    db.demandeaide.findAll({where:{Status:'Publié'}
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
@@ -105,5 +145,9 @@ module.exports = {
     getDemande,
     updateDemande,
     deleteDemande,
-    searchDemande
+    searchDemande,
+    getDemandebenif,
+    addDemandebenif,
+    getDemandefront,
+    searchDemandeById
 }

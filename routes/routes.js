@@ -74,9 +74,12 @@ router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandi
 
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
+router.get('/demandebenif',DemandeController.getDemandefront );
+router.get('/demande/search/:id',DemandeController.searchDemandeById );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
 router.get('/demande/search/:type',DemandeController.searchDemande );
 router.post('/demande/add',DemandeController.addDemande );
+router.post('/demande/addbenif',DemandeController.addDemandebenif );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
