@@ -1,25 +1,65 @@
-const getAllFormations = function(req, res, next) {
-    res.send("GET ALL FORMATIONS");
+
+const db = require('../models')
+
+//afficher all formations
+const getAllFormations = function (req, res, next) {
+    db.formation.findAll()
+        .then((response) => res.status(200).send(response))
+        .catch((err) => res.status(400).send(err))
+
+
 }
 
-const addFormation = function(req, res, next) {
-    res.send("ADD FORMATION");
+// add une formation
+const addFormation = function (req, res, next) {
+
+        // req.file.filename
+
+        db.formation.create( req.body)
+        .then((response)=>res.status(200).send(response))
+        .catch((err)=>res.status(400).send(err))
+
 }
 
-const editFormation = function(req, res, next) {
 
-    res.send("EDIT FORMATION BY ID " + req.params.id);
+
+//modifier annonce formation
+const editFormation = function (req, res, next) {
+
+    db.formation.update(req.body, { where: {id_formation : req.params.id } }).then((response) => {
+        res.status(200).send(response)
+    }).catch((err) => {
+        res.status(400).send(err)
+    })
+
 }
 
-const deleteFormation = function(req, res, next) {
-    res.send("DELETE FORMATION BY ID " + req.params.id);
+//supprimer une formation
+const deleteFormation = function (req, res, next) {
+
+    db.formation.destroy(
+        {
+            where: { id_formation: req.params.id }
+        }).then((response) => res.status(200).send(response))
+        .catch((err) => res.status(400).send(err))
+
 }
 
 
+//get
+ const getFormationById =function(req,res,next)
+ {
+    db.formation.findOne({ where:{id_formation:req.params.id}
 
+    }).then((response)=> res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+ }
 module.exports = {
     getAllFormations,
     addFormation,
     editFormation,
-    deleteFormation
+    deleteFormation,
+    getFormationById
+   
+
 }
