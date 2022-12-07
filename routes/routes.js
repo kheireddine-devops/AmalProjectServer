@@ -83,7 +83,7 @@ router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
 
 router.get('/candidatures', CandidatureController.getAllCandidatures);
 router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
-router.post('/candidature/add',CandidatureController.addCandidature );
+router.post('/candidature/add', Upload.UploadPdf.single("cv") ,CandidatureController.addCandidature );
 router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
 router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
 
