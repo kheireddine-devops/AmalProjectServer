@@ -1,6 +1,6 @@
 const initModels = require("./../models/init-models");
 const db = require("./../models/index");
-const {Op} = require("sequelize");
+const {Op, QueryTypes} = require("sequelize");
 const models = initModels(db.sequelize);
 const AvisValidator = require("./../validators/avis.validator");
 
@@ -27,11 +27,14 @@ const addAvis = (req,res,next)=>{
 /****************Affichage***************/
 
 const getAllAvis = (req,res,next)=>{
-    models.avis.findAll({include:["produit","compte"]})
+    //models.avis.findAll({include:{all:true}})
+    db.sequelize.query("SELECT A.*, U.nom,U.prenom,C.photo FROM avis AS A JOIN user AS U ON U.id_user = A.id_compte JOIN compte AS C ON C.id_compte = A.id_compte;",
+    { type: QueryTypes.SELECT })
     .then((response)=>res.status(200).send(response))
     .catch((err)=> res.status(400).send(err))
 }
-
+   
+        
 /***************Update****************/
 const editAvis = (req,res,next)=>{
     const avisData = AvisValidator.validate({
