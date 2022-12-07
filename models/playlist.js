@@ -14,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     date_create: {
       type: DataTypes.DATEONLY,
       allowNull: false
+
     },
     id_compte: {
       type: DataTypes.INTEGER,
