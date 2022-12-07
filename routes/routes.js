@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Upload = require("./../config/multer");
 
 
 
@@ -114,9 +115,17 @@ router.post('/beneficiers', UserController.addBeneficier);
 router.put('/beneficiers/:id', UserController.editBeneficier);
 router.get('/beneficiers/:id', UserController.getBeneficierByID);
 
+router.get('/test/users', UserController.getAllUsers);
+
+
+router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
 
 router.all('*', AuthMiddleware.IsAuth);
 
 router.get('/auth/doctors', UserController.getAllDoctors);
 
 module.exports = router;
+
+/*
+    req.file.filename
+ */

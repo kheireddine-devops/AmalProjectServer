@@ -1,6 +1,6 @@
 const initModels = require("./../models/init-models");
 const db = require("./../models/index");
-const {Op} = require("sequelize");
+const {Op, QueryTypes} = require("sequelize");
 const models = initModels(db.sequelize);
 const {crypt} = require("./accounts.controller");
 
@@ -383,11 +383,12 @@ const getAllUsers = (req,res,next) => {
 }
 
 const getAllDoctors = (req,res,next) => {
-    console.log(req.user.id)
+    /*console.log(req.user.id)*/
     models.medecin.findAll({
         attributes: ['id_user',['matricule','matricule'],['specialite','specialty'],['cin','cin'],['assurance','assurance']]
     })
         .then(result => {
+            console.log(result.assurance)
             res.status(200).send(result);
         }).catch((error) => {
         res.status(500).send(error);
@@ -554,6 +555,32 @@ const existsBeneficierByCarteHandicapNumber = (req,res,next) => {
     }
 }
 
+const editAccountPhoto = (req,res,next) => {
+
+    const _id = req.params.id;
+    if(_id !== undefined) {
+        models.compte.update({photo:  req.file.filename}, { where: { id_compte : _id } })
+        .then(value => {
+            res.send({
+                valid: true,
+                name: req.file.filename
+            })
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    }
+}
+
+
+// const getAllDemandes = (req,res,next) => {
+//     db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM demandeaide AS D JOIN user AS U ON U.id_user = D.id_user JOIN compte AS C ON C.id_compte = D.id_user;", { type: QueryTypes.SELECT })
+//         .then(result => {
+//             res.status(200).send(result);
+//         }).catch((error) => {
+//              res.status(500).send(error);
+//     });
+// }
+
 module.exports = {
     addDoctor,
     addBeneficier,
@@ -577,4 +604,5 @@ module.exports = {
     existsDoctorByMatricule,
     existsOrganizationByMatricule,
     existsBeneficierByCarteHandicapNumber,
+    editAccountPhoto
 }
