@@ -134,7 +134,7 @@ const updateDemande = function (req,res,next){
 }
 const deleteDemande= function(req,res,next){
     db.demandeaide.destroy({where:{id_demande_aide:req.params.id} 
-    }).then((response)=>res.status(200).send(response))
+    }).then((response)=>res.status({message:"removed"}).send(response))
     .catch((err)=>res.status(400).send(err))
 
 

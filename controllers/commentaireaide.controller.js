@@ -25,7 +25,7 @@ const getCommentaireaide = function(req,res,next){
 
 }
 const getCommentaireById = function (req,res,next){
-    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM commentaireaide AS D JOIN compte AS C ON C.id_compte = D.idCompte JOIN user AS U ON U.id_user = D.idCompte where D.idDemandeAide:id;", { replacements: { id: req.params.id },type: QueryTypes.SELECT })
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM commentaireaide AS D JOIN compte AS C ON C.id_compte = D.idCompte JOIN user AS U ON U.id_user = D.idCompte where D.idDemandeAide=:id;", { replacements: { id: req.params.id },type: QueryTypes.SELECT })
     .then(result => {
         res.status(200).send(result);
     }).catch((error) => {

@@ -13,6 +13,8 @@ const getAllFormations = function (req, res, next) {
 // add une formation
 const addFormation = function (req, res, next) {
 
+        // req.file.filename
+
         db.formation.create( req.body)
         .then((response)=>res.status(200).send(response))
         .catch((err)=>res.status(400).send(err))
