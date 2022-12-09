@@ -3,7 +3,6 @@ const router = express.Router();
 const Upload = require("./../config/multer");
 
 
-
 const FormationController = require("../controllers/formations.controller");
 const playlistsController = require("../controllers/playlists.controller");
 const VideoController = require("../controllers/videos.controller");
@@ -22,7 +21,6 @@ router.post('/auth', AccountController.login);
 //route  annoce formations (asma)
 router.get('/formations/', FormationController.getAllFormations);
 router.get('/formations/get/:id', FormationController.getFormationById);
-router.post('/formations/add/',FormationController.addFormation );
 router.put('/formations/edit/:id', FormationController.editFormation);
 router.delete('/formations/delete/:id', FormationController.deleteFormation);
 
@@ -46,7 +44,7 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 //route des  playliste  (asma)
 
 router.get('/playlists/', playlistsController.getAllPlaylists);//include id-compte
-router.get('/playlist/get/:id', playlistsController.getPlaylist);//include compte
+router.get('/playlist/get/:id', playlistsController.getPlaylistById);//include compte
 router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.put('/playlists/edit/:id', playlistsController.editPlaylist);//include compte
 router.delete('/playlists/delete/:id', playlistsController.deletePlaylist);//cascade dans le model
@@ -55,7 +53,7 @@ router.delete('/playlists/delete/:id', playlistsController.deletePlaylist);//cas
 //route des video d'une playliste  (asma)
 
 
-router.post('/playlists/video/add',VideoController.uploadVideo );//include playliste
+router.post('/playlists/uploadvideo',VideoController.onFileupload );
 router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//cascade
 
 /******************************Produit ***********************************/
@@ -85,19 +83,20 @@ router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
 
 router.get('/candidatures', CandidatureController.getAllCandidatures);
 router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
-router.post('/candidature/add',CandidatureController.addCandidature );
+router.post('/candidature/add', Upload.UploadPdf.single("cv") ,CandidatureController.addCandidature );
 router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
 router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
 
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
 router.get('/demandebenif',DemandeController.getDemandefront );
+
 router.get('/demande/search/:id',DemandeController.searchDemandeById );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
 router.get('/demande/search/:type',DemandeController.searchDemande );
-router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );
-router.post('/demande/addbenif',DemandeController.addDemandebenif );
+router.post('/demande/addbenif',Upload.UploadImageHelps.single('photo'),DemandeController.addDemandebenif );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
+router.put('/demande/editbenif/:id',DemandeController.updateDemandeBenif );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
@@ -114,10 +113,13 @@ router.delete('/accounts/:id', AccountController.deleteAccountByID);
 router.post('/accounts/exist-by-username', AccountController.existsAccountByUsername);
 router.post('/accounts/exist-by-email', AccountController.existsAccountByEmail);
 router.post('/accounts/exist-by-phone', AccountController.existsAccountByPhone);
+
 router.post('/doctors/exist-by-cin', UserController.existsDoctorByCIN);
 router.post('/doctors/exist-by-matricule', UserController.existsDoctorByMatricule);
+
 router.post('/organizations/exist-by-matricule', UserController.existsOrganizationByMatricule);
 router.post('/beneficiers/exist-by-catre', UserController.existsBeneficierByCarteHandicapNumber);
+
 router.get('/users', UserController.getAllUsers);
 router.get('/users/:id', UserController.getUserByID);
 router.post('/doctors', UserController.addDoctor);
@@ -140,12 +142,20 @@ router.get('/beneficiers/:id', UserController.getBeneficierByID);
 router.get('/test/users', UserController.getAllUsers);
 
 
-router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
+router.put('/accounts/:id/photo/edit', Upload.UploadImageHelps.single('photo') , UserController.editAccountPhoto);
+
 
 router.all('*', AuthMiddleware.IsAuth);
 
+
+
+router.post('/formations/add/',FormationController.addFormation );
+router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );
+router.get('/demandebenif/:id',DemandeController.getDemandebenif );
 router.get('/auth/doctors', UserController.getAllDoctors);
 
+  
+   
 module.exports = router;
 
 /*

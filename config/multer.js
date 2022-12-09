@@ -9,7 +9,7 @@ const MIME_TYPE_MAP = {
 };
 const storageImageUsers = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/images/users')
+        cb(null, 'public/uploads/images/users/')
     },
     filename: function (req, file, cb) {
         console.log(file.mimetype)
@@ -39,7 +39,7 @@ const storageImageProduits = multer.diskStorage({
 
 const storageImageHelps = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/images/helps')
+        cb(null, 'public/uploads/images/helps/')
     },
     filename: function (req, file, cb) {
         console.log(file.mimetype)

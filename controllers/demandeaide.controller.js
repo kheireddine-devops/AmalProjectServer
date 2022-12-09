@@ -38,15 +38,14 @@ exports.register=(typeDemande,sujet,nombre,contenue,date_publication,image,Statu
 }
 
 const addDemande = function(req,res,next){
+    console.log(req.file.filename)
+    console.log(req.body)
+    req.body = JSON.parse(req.body.demandeaide);
     db.demandeaide.create({
-        typeDemande:req.body.typeDemande,
-        sujet:req.body.sujet,
-        nombre:req.body.nombre,
-        contenue:req.body.contenue,
+        ...req.body,
         date_publication:Date.now(),
-        image:req.body.image,
-        Status:req.body.Status,
-        id_user:1
+        image:req.file.filename,
+        id_user:req.user.id
 
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
@@ -56,13 +55,12 @@ const addDemande = function(req,res,next){
 //add demande benif
 
 const addDemandebenif = function(req,res,next){
+    req.body = JSON.parse(req.body.demandeaide);
+
     db.demandeaide.create({
-        typeDemande:req.body.typeDemande,
-        sujet:req.body.sujet,
-        nombre:req.body.nombre,
-        contenue:req.body.contenue,
+        ...req.body,
         date_publication:Date.now(),
-        image:req.body.image,
+        image:req.file.filename,
         Status:"non publié",
         id_user:3
 
@@ -93,7 +91,7 @@ const searchDemandeById = function (req,res,next){
 
 }
 const getDemandebenif = (req,res,next) => {
-    db.demandeaide.findAll({where:{id_user:req.params.id}
+    db.demandeaide.findAll({where:{id_user:req.user.id}
     }).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
@@ -117,6 +115,7 @@ const getDemande = (req,res,next) => {
     });
 }
 const updateDemande = function (req,res,next){
+    
     db.demandeaide.update({
         typeDemande:req.body.typeDemande,
         sujet:req.body.sujet,
@@ -125,6 +124,22 @@ const updateDemande = function (req,res,next){
         date_publication:Date.now(),
         image:req.body.image,
         Status:req.body.Status,
+        id_user:3
+        
+
+    },{where:{id_demande_aide:req.params.id}}).then((response)=>res.status(200).send(response))
+    .catch((err)=>res.status(400).send(err))
+
+}
+const updateDemandeBenif = function (req,res,next){
+    
+    db.demandeaide.update({
+        typeDemande:req.body.typeDemande,
+        sujet:req.body.sujet,
+        nombre:req.body.nombre,
+        contenue:req.body.contenue,
+        date_publication:Date.now(),
+        image:req.body.image,
         id_user:3
         
 
@@ -149,5 +164,6 @@ module.exports = {
     getDemandebenif,
     addDemandebenif,
     getDemandefront,
-    searchDemandeById
+    searchDemandeById,
+    updateDemandeBenif
 }
