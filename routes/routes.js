@@ -78,16 +78,10 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 //route sabrine
 router.get('/emplois', EmploiController.getAllEmplois);
-router.get('/emploi/get/:id', EmploiController.getEmploisById);
-router.post('/emploi/add',EmploiController.addEmploi );
-router.put('/emploi/edit/:id', EmploiController.editEmploi);
-router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
+router.post('/candidature/add', Upload.UploadPdf.single("cv") ,CandidatureController.addCandidature );
 
-router.get('/candidatures', CandidatureController.getAllCandidatures);
-router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
-router.post('/candidature/add',CandidatureController.addCandidature );
-router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
-router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
+
+
 
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
@@ -142,6 +136,23 @@ router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') ,
 router.all('*', AuthMiddleware.IsAuth);
 
 router.get('/auth/doctors', UserController.getAllDoctors);
+//route sabrine
+
+router.get('/emploisbc', EmploiController.getAllEmploisByCompte);
+router.get('/emploi/get/:id', EmploiController.getEmploisById);
+router.post('/emploi/add',EmploiController.addEmploi );
+router.put('/emploi/edit/:id', EmploiController.editEmploi);
+router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
+
+router.get('/candidatures', CandidatureController.getAllCandidatures);
+router.get('/candidaturesbc', CandidatureController.getAllCandidaturesByCompte);
+router.get('/candidaturesbo', CandidatureController.getAllCandidaturesByOrganisation);
+router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
+
+
+router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
+router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
+
 
 module.exports = router;
 

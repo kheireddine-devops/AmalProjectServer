@@ -33,12 +33,22 @@ const getAllEmplois = function(req, res, next) {
             }).catch((error) => {
                  res.status(500).send(error);
         });
+}
+const getAllEmploisByCompte = function(req, res, next) {
+    // models.emplois.findAll({ include:{all:true}})
+    // .then((response)=>res.status(200).send(response))
+    // .catch((err)=>res.status(400).send(err))
+    // //res.send("GET ALL Emplois");
+    db.sequelize.query("SELECT E.*, O.*,C.* FROM emplois AS E JOIN organisation AS O ON O.id_compte = E.id_compte JOIN compte AS C ON C.id_compte = O.id_compte where E.id_compte=:id;", {
+        replacements: {id: req.user.id},
+         type: QueryTypes.SELECT })
 
-        
-
-
-       
-
+    
+            .then(result => {
+                res.status(200).send(result);
+            }).catch((error) => {
+                 res.status(500).send(error);
+        });
 }
  
 const getEmploisById = function(req, res, next) {
@@ -66,7 +76,6 @@ const deleteEmploi = function(req, res, next) {
         .then((response)=>res.status(200).send(JSON.stringify("deleted")))
         .catch((err)=>res.status(400).send(err))
 
-    //res.send("DELETE Emploi BY ID " + req.params.id);
 }
 
 module.exports = {
@@ -74,5 +83,10 @@ module.exports = {
     getEmploisById,
     addEmploi,
     editEmploi,
-    deleteEmploi
+    deleteEmploi,
+    getAllEmploisByCompte
+
+
+    
+
 }
