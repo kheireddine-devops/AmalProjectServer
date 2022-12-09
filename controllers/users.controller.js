@@ -3,6 +3,8 @@ const db = require("./../models/index");
 const {Op, QueryTypes} = require("sequelize");
 const models = initModels(db.sequelize);
 const {crypt} = require("./accounts.controller");
+const Mail = require("./../config/mail");
+const {EMAIL_HTML} = require("../config/email.message");
 
 const addDoctor = async (req,res,next) => {
 
@@ -48,6 +50,21 @@ const addDoctor = async (req,res,next) => {
                 doctor: _doctorModel
             }
         })
+
+        // const mailOptions = {
+        //     from: 'mkd.dev.ops@gmail.com',
+        //     to: "kheireddine.mechergui@esprit.tn",
+        //     subject: "Verify Your AmalApplication Email Address",
+        //     text: "Email de verification"
+        // };
+        //
+        // Mail.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log('EMAIL SENT SUCCESSFULLY : ' + info.response);
+        //     }
+        // });
         res.status(201).send(result);
     } catch (e) {
         res.status(500).send(e);
