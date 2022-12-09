@@ -3,7 +3,9 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('rapport', {
     id_rapport: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true
     },
     nom: {
       type: DataTypes.STRING(100),

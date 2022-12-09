@@ -14,6 +14,8 @@ const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
 const DemandeAideController = require("../controllers/commentaireaide.controller");
+const RepportController = require("../controllers/repport.controller");
+const DonsController = require("../controllers/don.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 router.post('/auth', AccountController.login);
@@ -59,6 +61,25 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 
 
+//Routes Haithem (dons)
+
+router.get('/dons/get/:id', DonsController.getDonsById);
+router.get('/dons', DonsController.getAllDons);
+router.post('/dons/add', DonsController.addDons);
+router.put('/dons/modify/:id', DonsController.modifyDons);
+router.delete('/dons/remove/:id', DonsController.removeDons);
+
+//Routes Haithem (repport)
+
+router.get('/rapport/', RepportController.getAllReport);
+router.post('/rapport/add', RepportController.addReport);
+router.put('/rapport/modify/:id', RepportController.modifyReport);
+router.delete('/rapport/remove/:id', RepportController.removeReport);
+router.get('/rapport/get/:id', RepportController.getReportById);
+
+
+
+
 //route sabrine
 router.get('/emplois', EmploiController.getAllEmplois);
 router.get('/emploi/get/:id', EmploiController.getEmploisById);
@@ -100,6 +121,10 @@ router.get('/doctors', UserController.getAllDoctors);
 router.get('/organizations', UserController.getAllOrganizations);
 router.get('/benevoles', UserController.getAllBenevoles);
 router.get('/beneficiers', UserController.getAllBeneficiers);
+
+
+
+
 
 
 router.all('*', AuthMiddleware.IsAuth);
