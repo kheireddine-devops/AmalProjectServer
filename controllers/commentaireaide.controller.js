@@ -7,7 +7,7 @@ const addCommentaireaide = function(req,res,next){
         dateCommentaire :Date.now(),
         like : 0,
         status:req.body.status,
-        idCompte :1,
+        idCompte :req.user.id,
         idDemandeAide:req.body.idDemandeAide,
     
 

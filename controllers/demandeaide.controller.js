@@ -115,16 +115,16 @@ const getDemande = (req,res,next) => {
     });
 }
 const updateDemande = function (req,res,next){
+    console.log(req.body)
     
     db.demandeaide.update({
         typeDemande:req.body.typeDemande,
         sujet:req.body.sujet,
-        nombre:req.body.nombre,
+        nombre:req.body.numberHelp,
         contenue:req.body.contenue,
-        date_publication:Date.now(),
-        image:req.body.image,
-        Status:req.body.Status,
-        id_user:3
+        // date_publication:Date.now(),
+        // image:req.body.image,
+        Status:req.body.Status
         
 
     },{where:{id_demande_aide:req.params.id}}).then((response)=>res.status(200).send(response))
@@ -138,10 +138,6 @@ const updateDemandeBenif = function (req,res,next){
         sujet:req.body.sujet,
         nombre:req.body.nombre,
         contenue:req.body.contenue,
-        date_publication:Date.now(),
-        image:req.body.image,
-        id_user:3
-        
 
     },{where:{id_demande_aide:req.params.id}}).then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
@@ -149,11 +145,10 @@ const updateDemandeBenif = function (req,res,next){
 }
 const deleteDemande= function(req,res,next){
     db.demandeaide.destroy({where:{id_demande_aide:req.params.id} 
-    }).then((response)=>res.status({message:"removed"}).send(response))
+    }).then((response)=>res.status(200).send({message:"removed"}))
     .catch((err)=>res.status(400).send(err))
-
-
 }
+
 module.exports = {
     addDemande,
     getDemandeById,

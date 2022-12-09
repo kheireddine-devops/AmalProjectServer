@@ -100,7 +100,6 @@ router.put('/demande/editbenif/:id',DemandeController.updateDemandeBenif );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
-router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
 router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireById );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
@@ -143,7 +142,7 @@ router.get('/test/users', UserController.getAllUsers);
 router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 
-router.put('/accounts/:id/photo/edit', Upload.UploadImageHelps.single('photo') , UserController.editAccountPhoto);
+router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
 
 
 router.all('*', AuthMiddleware.IsAuth);
@@ -151,6 +150,7 @@ router.all('*', AuthMiddleware.IsAuth);
 
 
 router.post('/formations/add/',FormationController.addFormation );
+router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );
 router.get('/demandebenif/:id',DemandeController.getDemandebenif );
 router.get('/auth/doctors', UserController.getAllDoctors);
