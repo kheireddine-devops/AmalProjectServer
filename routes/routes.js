@@ -136,6 +136,7 @@ router.put('/beneficiers/:id', UserController.editBeneficier);
 router.get('/beneficiers/:id', UserController.getBeneficierByID);
 
 router.get('/test/users', UserController.getAllUsers);
+router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 
 router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
