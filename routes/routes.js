@@ -14,6 +14,8 @@ const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
 const DemandeAideController = require("../controllers/commentaireaide.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
+const DonsController = require("../controllers/don.controller");
+const RepportController = require("../controllers/repport.controller");
 
 
 router.post('/auth', AccountController.login);
