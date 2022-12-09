@@ -22,13 +22,14 @@ db.sequelize.authenticate().then(() => {
     console.error('Unable to connect to the database: ', error);
 });
 
+
 const routes = require('./routes/routes');
 const { any } = require('joi');
 
 
 const server = express();
 
-server.use(fileUpload());
+//server.use(fileUpload());
 server.use(cors());
 server.use(logger('dev'));
 server.use(express.json());

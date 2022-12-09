@@ -46,6 +46,7 @@ const deleteFormation = function (req, res, next) {
         }).then((response) => {
             res.status(200).send({response});
         })
+        
         .catch((err) => res.status(400).send(err))
        
 
