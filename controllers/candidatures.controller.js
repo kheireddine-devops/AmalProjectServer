@@ -11,10 +11,10 @@ const log = console.log;
     console.log(req.file.filename)
     req.body = JSON.parse(req.body.candidature);
 
-    const joiError=validator.CandidatureSchema.validate(req.body)
-    if(joiError.error){
-        return res.status(500).send(joiError.error.details[0].message)
-    }
+    // const joiError=validator.CandidatureSchema.validate(req.body)
+    // if(joiError.error){
+    //     return res.status(500).send(joiError.error.details[0].message)
+    // }
     
     models.candidatures.create(
         {
