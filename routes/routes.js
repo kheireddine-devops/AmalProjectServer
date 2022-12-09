@@ -13,9 +13,7 @@ const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
 const DemandeAideController = require("../controllers/commentaireaide.controller");
-
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
-
 
 
 router.post('/auth', AccountController.login);
@@ -76,31 +74,47 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 
 
+//Routes Haithem (dons)
+
+router.get('/dons/get/:id', DonsController.getDonsById);
+router.get('/dons', DonsController.getAllDons);
+router.post('/dons/add', DonsController.addDons);
+router.put('/dons/modify/:id', DonsController.modifyDons);
+router.delete('/dons/remove/:id', DonsController.removeDons);
+
+//Routes Haithem (repport)
+
+router.get('/rapport/', RepportController.getAllReport);
+router.post('/rapport/add', RepportController.addReport);
+router.put('/rapport/modify/:id', RepportController.modifyReport);
+router.delete('/rapport/remove/:id', RepportController.removeReport);
+router.get('/rapport/get/:id', RepportController.getReportById);
+
+
+
+
 //route sabrine
 router.get('/emplois', EmploiController.getAllEmplois);
-router.get('/emploi/get/:id', EmploiController.getEmploisById);
-router.post('/emploi/add',EmploiController.addEmploi );
-router.put('/emploi/edit/:id', EmploiController.editEmploi);
-router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
+router.post('/candidature/add', Upload.UploadPdf.single("cv") ,CandidatureController.addCandidature );
 
-router.get('/candidatures', CandidatureController.getAllCandidatures);
-router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
-router.post('/candidature/add',CandidatureController.addCandidature );
-router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
-router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
+
+
 
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
+router.get('/demandebenif',DemandeController.getDemandefront );
+
+router.get('/demande/search/:id',DemandeController.searchDemandeById );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
 router.get('/demande/search/:type',DemandeController.searchDemande );
-router.post('/demande/add',DemandeController.addDemande );
+router.post('/demande/addbenif',Upload.UploadImageHelps.single('photo'),DemandeController.addDemandebenif );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
+router.put('/demande/editbenif/:id',DemandeController.updateDemandeBenif );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
-router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
-router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireDemande );
+router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireById );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
 router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 
@@ -138,17 +152,36 @@ router.put('/beneficiers/:id', UserController.editBeneficier);
 router.get('/beneficiers/:id', UserController.getBeneficierByID);
 
 router.get('/test/users', UserController.getAllUsers);
+router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 
 router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
-
 
 router.all('*', AuthMiddleware.IsAuth);
 
 router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.post('/formations/add/',FormationController.addFormation );
-
+router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
+router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );
+router.get('/demandebenif/:id',DemandeController.getDemandebenif );
 router.get('/auth/doctors', UserController.getAllDoctors);
+//route sabrine
+
+router.get('/emploisbc', EmploiController.getAllEmploisByCompte);
+router.get('/emploi/get/:id', EmploiController.getEmploisById);
+router.post('/emploi/add',EmploiController.addEmploi );
+router.put('/emploi/edit/:id', EmploiController.editEmploi);
+router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
+
+router.get('/candidatures', CandidatureController.getAllCandidatures);
+router.get('/candidaturesbc', CandidatureController.getAllCandidaturesByCompte);
+router.get('/candidaturesbo', CandidatureController.getAllCandidaturesByOrganisation);
+router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
+
+
+router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
+router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
+
 
   
    

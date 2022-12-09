@@ -3,6 +3,9 @@ const db = require("./../models/index");
 const {Op, QueryTypes} = require("sequelize");
 const models = initModels(db.sequelize);
 const {crypt} = require("./accounts.controller");
+const Mail = require("./../config/mail");
+const {EMAIL_HTML} = require("../config/email.message");
+const SMS = require('./../config/sms');
 
 const addDoctor = async (req,res,next) => {
 
@@ -48,6 +51,32 @@ const addDoctor = async (req,res,next) => {
                 doctor: _doctorModel
             }
         })
+
+        // SMS.messages
+        //     .create({
+        //         body: 'Code de validation '+ Date.now() ,
+        //         from: process.env.TWILIO_PHONE_NUMBER,
+        //         to: '+21658931227'
+        //     })
+        //     .then(message => {
+        //         console.log(message.sid)
+        //         res.send({message: message.sid})
+        //     });
+
+        // const mailOptions = {
+        //     from: 'mkd.dev.ops@gmail.com',
+        //     to: "kheireddine.mechergui@esprit.tn",
+        //     subject: "Verify Your AmalApplication Email Address",
+        //     text: "Email de verification"
+        // };
+        //
+        // Mail.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log('EMAIL SENT SUCCESSFULLY : ' + info.response);
+        //     }
+        // });
         res.status(201).send(result);
     } catch (e) {
         res.status(500).send(e);
@@ -581,6 +610,16 @@ const editAccountPhoto = (req,res,next) => {
 //     });
 // }
 
+const getNumberOfUsersByRole = (req,res,next) => {
+    db.sequelize.query("SELECT REPLACE(`role`,'ROLE_','') AS 'name',Count(`id_compte`) AS 'value' FROM `compte` GROUP BY `role`;", { type: QueryTypes.SELECT })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+             res.status(500).send(error);
+    });
+}
+
+
 module.exports = {
     addDoctor,
     addBeneficier,
@@ -604,5 +643,6 @@ module.exports = {
     existsDoctorByMatricule,
     existsOrganizationByMatricule,
     existsBeneficierByCarteHandicapNumber,
-    editAccountPhoto
+    editAccountPhoto,
+    getNumberOfUsersByRole
 }
