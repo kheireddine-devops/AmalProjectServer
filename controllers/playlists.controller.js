@@ -1,7 +1,10 @@
 const { response } = require('express')
 const express = require('express')
 const route = express.Router()
+const initModels = require("./../models/init-models");
 const db = require('../models')
+const models = initModels(db.sequelize);
+const video = require('../models/video')
 
 
 //afficher tous les playlistes
@@ -9,7 +12,7 @@ const db = require('../models')
 const getAllPlaylists = function (req, res, next) {
 
     db.playlist.findAll({
-        // where:{include:[db.video] ,include:[db.compte] }
+        
     })
 
         .then((response) => res.status(200).send(response))
@@ -19,23 +22,32 @@ const getAllPlaylists = function (req, res, next) {
 
 // afficher playliste par id avec les videos
 
-const getPlaylist = function (req, res, next) {
-
-    db.playlist.findOne({ 
-        where: { id_playlist: req.params.id ,include:[db.video] ,include:[db.compte]  }
+const getPlaylistById = function (req, res, next) {
+   
+    db.playlist.findOne({
+       
+        where:{id_playlist:req.params.id,include:[db.video]}
+        }).then((response)=>res.status(200).send(response))
+        .catch((err)=>res.status(400).send(err))
     
-    })
-
-        .then((response) => res.status(200).send(response))
-        .catch((err) => res.status(400).send(err))
-
 }
+
+
 
 //ajouter une playliste
 
 const addPlaylist = function (req, res, next) {
+    dateSystem = new Date().getTime(); 
+   
 
-    db.playlist.create(req.bady)
+    db.playlist.create({
+
+        Nom_playlist:req.body.Nom_playlist,
+        date_create:Date.now(),
+        id_compte : req.body.id_compte
+   
+
+    })
 
         .then((response) => res.status(201).send(response))
         .catch((err) => res.status(400).send(err))
@@ -46,7 +58,12 @@ const addPlaylist = function (req, res, next) {
 //modifier le nom de playliste
 const editPlaylist = function (req, res, next) {
 
-    db.playlist.update(req.body, { where: { id: req.params.id } ,include:[db.compte] })
+    db.playlist.update( 
+        
+   {Nom_playlist:req.body.Nom_playlist},       
+  {  where: { id_playlist: req.params.id } 
+       
+        })
         .then((response) => {
             res.status(200).send(response)
         })
@@ -61,8 +78,11 @@ const deletePlaylist = function (req, res, next) {
 
     db.playlist.destroy(
         {
-            where: { id: req.params.id }
-        }).then((response) => res.status(200).send(response))
+            where: { id_playlist: req.params.id }
+        }).then((response) => 
+        {
+            res.status(200).send({response});
+        })
         .catch((err) => res.status(400).send(err))
 
 }
@@ -72,7 +92,7 @@ const deletePlaylist = function (req, res, next) {
 module.exports = {
     getAllPlaylists,
     addPlaylist,
-    getPlaylist,
+    getPlaylistById,
     editPlaylist,
     deletePlaylist,
 

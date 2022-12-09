@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  const commentaireaide = sequelize.define('commentaireaide', {
+  return sequelize.define('commentaireaide', {
     idCommentaire: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -57,6 +57,4 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-  
-  return commentaireaide
 };

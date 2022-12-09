@@ -11,10 +11,10 @@ const log = console.log;
     console.log(req.file.filename)
     req.body = JSON.parse(req.body.candidature);
 
-    // const joiError=validator.CandidatureSchema.validate(req.body)
-    // if(joiError.error){
-    //     return res.status(500).send(joiError.error.details[0].message)
-    // }
+    const joiError=validator.CandidatureSchema.validate(req.body)
+    if(joiError.error){
+        return res.status(500).send(joiError.error.details[0].message)
+    }
     
     models.candidatures.create(
         {
@@ -22,7 +22,6 @@ const log = console.log;
         url_cv: req.file.filename
         //id_compte: req.user.id
     }
-
     )
     .then((response)=>res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))

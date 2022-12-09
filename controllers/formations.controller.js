@@ -13,9 +13,12 @@ const getAllFormations = function (req, res, next) {
 // add une formation
 const addFormation = function (req, res, next) {
 
-        // req.file.filename
+    console.log(req.body)
 
-        db.formation.create( req.body)
+        db.formation.create( {
+            ...req.body,
+            id_compte: req.user.id
+        })
         .then((response)=>res.status(200).send(response))
         .catch((err)=>res.status(400).send(err))
 
@@ -40,13 +43,16 @@ const deleteFormation = function (req, res, next) {
     db.formation.destroy(
         {
             where: { id_formation: req.params.id }
-        }).then((response) => res.status(200).send(response))
+        }).then((response) => {
+            res.status(200).send({response});
+        })
         .catch((err) => res.status(400).send(err))
+       
 
 }
 
 
-//get
+//get by id formation
  const getFormationById =function(req,res,next)
  {
     db.formation.findOne({ where:{id_formation:req.params.id}
@@ -54,6 +60,7 @@ const deleteFormation = function (req, res, next) {
     }).then((response)=> res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
  }
+ 
 module.exports = {
     getAllFormations,
     addFormation,
