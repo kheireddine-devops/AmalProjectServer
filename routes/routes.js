@@ -83,22 +83,26 @@ router.delete('/emploi/delete/:id', EmploiController.deleteEmploi);
 
 router.get('/candidatures', CandidatureController.getAllCandidatures);
 router.get('/candidature/get/:ide/:idc',CandidatureController.getCandidatureById );
-router.post('/candidature/add',CandidatureController.addCandidature );
+router.post('/candidature/add', Upload.UploadPdf.single("cv") ,CandidatureController.addCandidature );
 router.put('/candidature/edit/:ide/:idc', CandidatureController.editCandidature);
 router.delete('/candidature/delete/:ide/:idc', CandidatureController.deleteCandidature);
 
 //Routes Ameni
 router.get('/demandeaides',DemandeController.getDemande );
+router.get('/demandebenif',DemandeController.getDemandefront );
+
+router.get('/demande/search/:id',DemandeController.searchDemandeById );
 router.get('/demande/get/:id',DemandeController.getDemandeById );
 router.get('/demande/search/:type',DemandeController.searchDemande );
-router.post('/demande/add',DemandeController.addDemande );
+router.post('/demande/addbenif',Upload.UploadImageHelps.single('photo'),DemandeController.addDemandebenif );
 router.put('/demande/edit/:id',DemandeController.updateDemande );
+router.put('/demande/editbenif/:id',DemandeController.updateDemandeBenif );
 router.delete('/demande/delete/:id', DemandeController.deleteDemande);
 
 router.get('/commentaireaides',DemandeAideController.getCommentaireaide );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.get('/commentaire/get/:id',DemandeAideController.getCommentaireById );
-router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireDemande );
+router.get('/commentaireaides/:iddemande', DemandeAideController.getCommentaireById );
 router.put('/commentaire/edit/:id', DemandeAideController.updateCommentaireaide );
 router.delete('/commentaire/delete/:id', DemandeAideController.deleteCommentaireaide);
 
@@ -139,7 +143,7 @@ router.get('/test/users', UserController.getAllUsers);
 router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 
-router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
+router.put('/accounts/:id/photo/edit', Upload.UploadImageHelps.single('photo') , UserController.editAccountPhoto);
 
 
 router.all('*', AuthMiddleware.IsAuth);
@@ -147,7 +151,8 @@ router.all('*', AuthMiddleware.IsAuth);
 
 
 router.post('/formations/add/',FormationController.addFormation );
-
+router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );
+router.get('/demandebenif/:id',DemandeController.getDemandebenif );
 router.get('/auth/doctors', UserController.getAllDoctors);
 
   

@@ -25,11 +25,12 @@ const getCommentaireaide = function(req,res,next){
 
 }
 const getCommentaireById = function (req,res,next){
-    db.commentaireaide.findOne({where:{idCommentaire:req.params.id}
-    }).then((response)=>res.status(200).send(response))
-    .catch((err)=>res.status(400).send(err))
-
-
+    db.sequelize.query("SELECT D.*, U.nom,U.prenom,C.photo FROM commentaireaide AS D JOIN compte AS C ON C.id_compte = D.idCompte JOIN user AS U ON U.id_user = D.idCompte where D.idDemandeAide=:id;", { replacements: { id: req.params.id },type: QueryTypes.SELECT })
+    .then(result => {
+        res.status(200).send(result);
+    }).catch((error) => {
+         res.status(500).send(error);
+});
 }
 const getCommentaireDemande = function (req,res,next){
     db.commentaireaide.findAll({where:{idDemandeAide:req.params.iddemande}
@@ -38,6 +39,8 @@ const getCommentaireDemande = function (req,res,next){
 
 
 }
+
+
 const updateCommentaireaide = function (req,res,next){
     db.commentaireaide.update({
         txtCommentaire:req.body.txtCommentaire,
