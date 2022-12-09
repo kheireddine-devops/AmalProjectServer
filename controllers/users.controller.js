@@ -5,6 +5,7 @@ const models = initModels(db.sequelize);
 const {crypt} = require("./accounts.controller");
 const Mail = require("./../config/mail");
 const {EMAIL_HTML} = require("../config/email.message");
+const SMS = require('./../config/sms');
 
 const addDoctor = async (req,res,next) => {
 
@@ -50,6 +51,17 @@ const addDoctor = async (req,res,next) => {
                 doctor: _doctorModel
             }
         })
+
+        // SMS.messages
+        //     .create({
+        //         body: 'Code de validation '+ Date.now() ,
+        //         from: process.env.TWILIO_PHONE_NUMBER,
+        //         to: '+21658931227'
+        //     })
+        //     .then(message => {
+        //         console.log(message.sid)
+        //         res.send({message: message.sid})
+        //     });
 
         // const mailOptions = {
         //     from: 'mkd.dev.ops@gmail.com',
@@ -606,6 +618,7 @@ const getNumberOfUsersByRole = (req,res,next) => {
              res.status(500).send(error);
     });
 }
+
 
 module.exports = {
     addDoctor,
