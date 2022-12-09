@@ -581,6 +581,15 @@ const editAccountPhoto = (req,res,next) => {
 //     });
 // }
 
+const getNumberOfUsersByRole = (req,res,next) => {
+    db.sequelize.query("SELECT REPLACE(`role`,'ROLE_','') AS 'name',Count(`id_compte`) AS 'value' FROM `compte` GROUP BY `role`;", { type: QueryTypes.SELECT })
+        .then(result => {
+            res.status(200).send(result);
+        }).catch((error) => {
+             res.status(500).send(error);
+    });
+}
+
 module.exports = {
     addDoctor,
     addBeneficier,
@@ -604,5 +613,6 @@ module.exports = {
     existsDoctorByMatricule,
     existsOrganizationByMatricule,
     existsBeneficierByCarteHandicapNumber,
-    editAccountPhoto
+    editAccountPhoto,
+    getNumberOfUsersByRole
 }
