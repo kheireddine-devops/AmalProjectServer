@@ -1,6 +1,6 @@
 const Joi=require('joi')
 const EmploiSchema=Joi.object({
-   id_emploi:Joi.number(),
+    id_emploi:Joi.number(),
     titre_emploi:Joi.string().required(),
     descriptif_emploi:Joi.string().required(),
     secteur:Joi.string().required(),
