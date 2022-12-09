@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Upload = require("./../config/multer");
 
-
 const FormationController = require("../controllers/formations.controller");
 const playlistsController = require("../controllers/playlists.controller");
 const VideoController = require("../controllers/videos.controller");
@@ -14,9 +13,8 @@ const EmploiController = require("../controllers/emplois.controller");
 const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
 const DemandeAideController = require("../controllers/commentaireaide.controller");
-const RepportController = require("../controllers/repport.controller");
-const DonsController = require("../controllers/don.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
+
 
 router.post('/auth', AccountController.login);
 
@@ -47,15 +45,15 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 router.get('/playlists/', playlistsController.getAllPlaylists);//include id-compte
 router.get('/playlist/get/:id', playlistsController.getPlaylistById);//include compte
-router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.put('/playlists/edit/:id', playlistsController.editPlaylist);//include compte
 router.delete('/playlists/delete/:id', playlistsController.deletePlaylist);//cascade dans le model
 
 
 //route des video d'une playliste  (asma)
 
-
-router.post('/playlists/uploadvideo',VideoController.onFileupload );
+router.post('/playlists/videos/',VideoController.getAllVideos );
+router.post('/playlists/videos/get/:id',VideoController.getVideoById );
+router.post('/playlists/uploadvideo', Upload.UploadVideos.single("v"),VideoController.uploadVideo );
 router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//cascade
 
 /******************************Produit ***********************************/
@@ -63,7 +61,7 @@ router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//casc
 router.get('/produits', ProduitController.getAllProduits);
 router.get('/produit/:id',ProduitController.getOneProduit);
 router.post('/createproduit',ProduitController.addProduit );
-router.put('/produit/update/:id', ProduitController.editProduit);
+router.put('/produit/update/:id', ProduitController.editProduit);0
 router.delete('/produit/delete/:id', ProduitController.deleteProduit);
 
 
@@ -159,15 +157,9 @@ router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
 
-
-
-
-
-
 router.all('*', AuthMiddleware.IsAuth);
 
-
-
+router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.post('/formations/add/',FormationController.addFormation );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );

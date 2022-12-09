@@ -22,6 +22,7 @@ db.sequelize.authenticate().then(() => {
     console.error('Unable to connect to the database: ', error);
 });
 
+
 const routes = require('./routes/routes');
 const { any } = require('joi');
 
