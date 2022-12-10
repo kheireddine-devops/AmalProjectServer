@@ -42,8 +42,6 @@ function initModels(sequelize) {
 
   compte.belongsToMany(emplois, { as: 'id_emploi_emplois', through: candidatures, foreignKey: "id_compte", otherKey: "id_emploi" });
   emplois.belongsToMany(compte, { as: 'id_compte_comptes', through: candidatures, foreignKey: "id_emploi", otherKey: "id_compte" });
-  demandeaide.belongsTo(beneficier, { as: "id_user_beneficier", foreignKey: "id_user"});
-  beneficier.hasMany(demandeaide, { as: "demandeaides", foreignKey: "id_user"});
   rendez_vous.belongsTo(beneficier, { as: "id_beneficier_beneficier", foreignKey: "id_beneficier"});
   beneficier.hasMany(rendez_vous, { as: "rendez_vous", foreignKey: "id_beneficier"});
   avis.belongsTo(compte, { as: "id_compte_compte", foreignKey: "id_compte"});
@@ -68,7 +66,7 @@ function initModels(sequelize) {
   medecin.hasMany(rendez_vous, { as: "rendez_vous", foreignKey: "id_medecin"});
   emplois.belongsTo(organisation, { as: "id_compte_organisation", foreignKey: "id_compte"});
   organisation.hasMany(emplois, { as: "emplois", foreignKey: "id_compte"});
-  video.belongsTo(playlist, { as: "id_playlist_playlist", foreignKey: "id_playlist",onDelete:'cascade'});
+  video.belongsTo(playlist, { as: "id_playlist_playlist", foreignKey: "id_playlist"});
   playlist.hasMany(video, { as: "videos", foreignKey: "id_playlist"});
   avis.belongsTo(produit, { as: "id_produit_produit", foreignKey: "id_produit"});
   produit.hasMany(avis, { as: "avis", foreignKey: "id_produit"});
@@ -78,6 +76,8 @@ function initModels(sequelize) {
   user.hasOne(beneficier, { as: "beneficier", foreignKey: "id_user"});
   benevole.belongsTo(user, { as: "id_user_user", foreignKey: "id_user"});
   user.hasOne(benevole, { as: "benevole", foreignKey: "id_user"});
+  demandeaide.belongsTo(user, { as: "id_user_user", foreignKey: "id_user"});
+  user.hasMany(demandeaide, { as: "demandeaides", foreignKey: "id_user"});
   medecin.belongsTo(user, { as: "id_user_user", foreignKey: "id_user"});
   user.hasOne(medecin, { as: "medecin", foreignKey: "id_user"});
 
