@@ -28,7 +28,7 @@ router.delete('/formations/delete/:id', FormationController.deleteFormation);
 
 router.get('/produits', ProduitController.getAllProduits);
 router.get('/produit/:id',ProduitController.getOneProduit);
-router.post('/createproduit',ProduitController.addProduit );
+router.post('/createproduit', Upload.UploadImageProduits.single("photo"),ProduitController.addProduit );
 router.put('/produit/update/:id', ProduitController.editProduit);
 router.delete('/produit/delete/:id', ProduitController.deleteProduit);
 

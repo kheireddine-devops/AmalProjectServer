@@ -24,6 +24,11 @@ const getAllProduits = (req,res,next)=>{
    /************ Create **************/
 
 const addProduit = (req,res,next)=>{
+
+    console.log(req.body.produit);
+    console.log(req.file.filename);
+    req.body = JSON.parse(req.body.produit);
+    req.body.photoP = req.file.filename;
     dateSys = new Date().getTime();
     const produitData = ProduitValidator.validate({
         libelleP:req.body.libelleP,
@@ -36,16 +41,18 @@ const addProduit = (req,res,next)=>{
     })
 
 
-    if(produitData.error === undefined) {
+   if(produitData.error === undefined) {
 
         models.produit.create({
+        
             ...produitData.value,
             dateP: dateSys,
             id_beneficier: 3
         }).then((response)=>res.status(200).send(response))
         .catch((err)=> res.status(400).send(err))
-    } else {
-        res.status(401).send(produitData.error.details)
+    } 
+    else {
+       res.status(401).send(produitData.error.details)
     }
 }
 
@@ -61,7 +68,6 @@ const produitData = ProduitValidator.validate({
         photoP: req.body.photoP,
         numVendeur: req.body.numVendeur,
         cathegorie: req.body.cathegorie,
-       // dateP: req.body.dateP,
     })
     if(produitData.error === undefined) {
         models.produit.update({
@@ -79,11 +85,9 @@ const produitData = ProduitValidator.validate({
 
 const deleteProduit = (req,res,next)=>{
     models.produit.destroy({where:{id_produit:req.params.id}})
-    .then((response)=>{res.send("removed")})
+    .then((response)=>{res.send({message: "removed"})})
     .catch((err)=>{res.status(400).send(err)})
 }
-
-
 
 module.exports = {
     getOneProduit,
