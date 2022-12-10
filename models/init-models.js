@@ -68,7 +68,7 @@ function initModels(sequelize) {
   medecin.hasMany(rendez_vous, { as: "rendez_vous", foreignKey: "id_medecin"});
   emplois.belongsTo(organisation, { as: "id_compte_organisation", foreignKey: "id_compte"});
   organisation.hasMany(emplois, { as: "emplois", foreignKey: "id_compte"});
-  video.belongsTo(playlist, { as: "id_playlist_playlist", foreignKey: "id_playlist"});
+  video.belongsTo(playlist, { as: "id_playlist_playlist", foreignKey: "id_playlist",onDelete:'cascade'});
   playlist.hasMany(video, { as: "videos", foreignKey: "id_playlist"});
   avis.belongsTo(produit, { as: "id_produit_produit", foreignKey: "id_produit"});
   produit.hasMany(avis, { as: "avis", foreignKey: "id_produit"});

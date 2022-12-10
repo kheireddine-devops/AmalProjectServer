@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,9 +7,15 @@ const logger = require('morgan');
 const cors = require('cors');
 const passport = require("passport");
 const session = require("express-session");
+//const fileUpload = require('express-fileupload');
+
+
+
 
 
 const db = require("./models/index");
+
+
 db.sequelize.authenticate().then(() => {
     console.log('Connection has been established successfully.');
 }).catch((error) => {
@@ -16,10 +23,12 @@ db.sequelize.authenticate().then(() => {
 });
 
 const routes = require('./routes/routes');
+const { any } = require('joi');
 
 
 const server = express();
 
+//server.use(fileUpload());
 server.use(cors());
 server.use(logger('dev'));
 server.use(express.json());
