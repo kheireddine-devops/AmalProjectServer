@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Upload = require("./../config/multer");
 
-
 const FormationController = require("../controllers/formations.controller");
 const playlistsController = require("../controllers/playlists.controller");
 const VideoController = require("../controllers/videos.controller");
@@ -15,6 +14,9 @@ const CandidatureController = require("../controllers/candidatures.controller");
 const DemandeController = require("../controllers/demandeaide.controller");
 const DemandeAideController = require("../controllers/commentaireaide.controller");
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
+const DonsController = require("../controllers/don.controller");
+const RepportController = require("../controllers/repport.controller");
+
 
 router.post('/auth', AccountController.login);
 
@@ -28,7 +30,7 @@ router.delete('/formations/delete/:id', FormationController.deleteFormation);
 
 router.get('/produits', ProduitController.getAllProduits);
 router.get('/produit/:id',ProduitController.getOneProduit);
-router.post('/createproduit',ProduitController.addProduit );
+router.post('/createproduit', Upload.UploadImageProduits.single("photo"),ProduitController.addProduit );
 router.put('/produit/update/:id', ProduitController.editProduit);
 router.delete('/produit/delete/:id', ProduitController.deleteProduit);
 
@@ -45,15 +47,15 @@ router.delete('/avis/delete/:id', AvisController.deleteAvis);
 
 router.get('/playlists/', playlistsController.getAllPlaylists);//include id-compte
 router.get('/playlist/get/:id', playlistsController.getPlaylistById);//include compte
-router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.put('/playlists/edit/:id', playlistsController.editPlaylist);//include compte
 router.delete('/playlists/delete/:id', playlistsController.deletePlaylist);//cascade dans le model
 
 
 //route des video d'une playliste  (asma)
 
-
-router.post('/playlists/uploadvideo',VideoController.onFileupload );
+router.post('/playlists/videos/',VideoController.getAllVideos );
+router.post('/playlists/videos/get/:id',VideoController.getVideoById );
+router.post('/playlists/uploadvideo', Upload.UploadVideos.single("v"),VideoController.uploadVideo );
 router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//cascade
 
 /******************************Produit ***********************************/
@@ -61,7 +63,7 @@ router.delete('/playlists/video/delete/:id', VideoController.deleteVideo);//casc
 router.get('/produits', ProduitController.getAllProduits);
 router.get('/produit/:id',ProduitController.getOneProduit);
 router.post('/createproduit',ProduitController.addProduit );
-router.put('/produit/update/:id', ProduitController.editProduit);
+router.put('/produit/update/:id', ProduitController.editProduit);0
 router.delete('/produit/delete/:id', ProduitController.deleteProduit);
 
 
@@ -71,6 +73,25 @@ router.get('/avis', AvisController.getAllAvis);
 router.post('/createavis',AvisController.addAvis );
 router.put('/avis/update/:id', AvisController.editAvis);
 router.delete('/avis/delete/:id', AvisController.deleteAvis);
+
+
+
+//Routes Haithem (dons)
+
+router.get('/dons/get/:id', DonsController.getDonsById);
+router.get('/dons', DonsController.getAllDons);
+router.post('/dons/add', DonsController.addDons);
+router.put('/dons/modify/:id', DonsController.modifyDons);
+router.delete('/dons/remove/:id', DonsController.removeDons);
+
+//Routes Haithem (repport)
+
+router.get('/rapport/', RepportController.getAllReport);
+router.post('/rapport/add', RepportController.addReport);
+router.put('/rapport/modify/:id', RepportController.modifyReport);
+router.delete('/rapport/remove/:id', RepportController.removeReport);
+router.get('/rapport/get/:id', RepportController.getReportById);
+
 
 
 
@@ -138,11 +159,9 @@ router.get('/statistics/users-by-roles', UserController.getNumberOfUsersByRole);
 
 router.put('/accounts/:id/photo/edit', Upload.UploadImageUsers.single('photo') , UserController.editAccountPhoto);
 
-
 router.all('*', AuthMiddleware.IsAuth);
 
-
-
+router.post('/playlists/add/',playlistsController.addPlaylist );//include compte
 router.post('/formations/add/',FormationController.addFormation );
 router.post('/commentaire/add',DemandeAideController.addCommentaireaide );
 router.post('/demande/add', Upload.UploadImageHelps.single('photo'),DemandeController.addDemande );

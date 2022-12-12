@@ -2,17 +2,22 @@ const { response } = require('express')
 const express = require('express')
 const route = express.Router()
 const initModels = require("./../models/init-models");
-const db = require('../models')
+const db = require("./../models/index");
+
 const models = initModels(db.sequelize);
 const video = require('../models/video')
 
+
+const Joi=require('joi')
+const {Op, QueryTypes} = require("sequelize");
+const validator=require('../validators/validator')
 
 //afficher tous les playlistes
 
 const getAllPlaylists = function (req, res, next) {
 
-    db.playlist.findAll({
-        
+    models.playlist.findAll({
+
     })
 
         .then((response) => res.status(200).send(response))
@@ -22,12 +27,15 @@ const getAllPlaylists = function (req, res, next) {
 
 // afficher playliste par id avec les videos
 
-const getPlaylistById = function (req, res, next) {
+const getPlaylistById =  function (req, res, next) {
    
-    db.playlist.findOne({
+    models.playlist.findOne({
+
+        where:{id_playlist:req.params.id},
+        include: ["videos"]
        
-        where:{id_playlist:req.params.id,include:[db.video]}
-        }).then((response)=>res.status(200).send(response))
+    })
+        .then((response)=>res.status(200).send(response))
         .catch((err)=>res.status(400).send(err))
     
 }
@@ -37,14 +45,14 @@ const getPlaylistById = function (req, res, next) {
 //ajouter une playliste
 
 const addPlaylist = function (req, res, next) {
-    dateSystem = new Date().getTime(); 
+
    
 
     db.playlist.create({
 
         Nom_playlist:req.body.Nom_playlist,
         date_create:Date.now(),
-        id_compte : req.body.id_compte
+        id_compte : req.user.id
    
 
     })

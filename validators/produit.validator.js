@@ -17,16 +17,16 @@
             "string.positive": "le prix doit etre positif",
             "string.max":"La description est trop long"
         }),
-        photoP:Joi.string().required().messages({
-            "any.required": "l'image est obligatoire"
-        }),
+          photoP:Joi.string().required().messages({
+             "any.required": "l'image est obligatoire"
+          }),
 
         numVendeur:Joi.number().max(99999999).required().messages({
             "any.required": "le numero est obligatoire",
             "string.max": "le numero doit etre composée de 8 chiffres"
         }),
         cathegorie:Joi.string().required().messages({
-            "any.required": "le prix est obligatoire"
+            "any.required": "Categorie est obligatoire"
         }),
 
     }).options({

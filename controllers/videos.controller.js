@@ -8,18 +8,44 @@ const server = require('../server');
 
 
 //**************** */
+const getAllVideos=  (req, res,next) => {
+  db.video.findAll()
+
+      .then((response) => res.status(200).send(response))
+      .catch((err) => res.status(400).send(err))
+
+}
+
+//afficher playliste par id avec les videos
+
+const getVideoById =  function (req, res, next) {
+   
+    db.video.findOne({
+// SELECT V.*, P.Nom_playlist FROM video AS V JOIN playlist AS P ON V.id_playlist = P.id_playlist where p.id_playlist=1;
+   
+where:{[Op.and]:[{id_video :req.params.id}] }})   
+        // where:{id_playlist:req.params.id}
+
+        .then((response)=>res.status(200).send(response))
+        .catch((err)=>res.status(400).send(err))
+    
+}
 
 
 
 
-  const onFileupload=  (req, res,next) => {
-    let file = req['files'].thumbnail;
   
-    console.log("File uploaded: ", file.name);
 
-  }
 const uploadVideo =  (req, res,next) => {
-    db.video.create(req.bady)
+
+  console.log(req.file.filname);
+  req.body = JSON.parse(req.body.video);
+  
+    db.video.create({
+      url: req.file.filename,
+      titre: req.body.titre,
+      id_playlist: 1
+      })
 
         .then((response) => res.status(201).send(response))
         .catch((err) => res.status(400).send(err))
@@ -31,7 +57,7 @@ const uploadVideo =  (req, res,next) => {
 //supprimer video
 const deleteVideo = function(req, res, next) {
     db.video.destroy(
-        { where:{id:req.params.id} 
+        { where:{id_video:req.params.id} 
     }).then((response)=> res.status(200).send(response))
     .catch((err)=>res.status(400).send(err))
 
@@ -43,7 +69,8 @@ module.exports = {
   
     uploadVideo,
     deleteVideo,
-    onFileupload
+    getAllVideos,
+    getVideoById
 
     
 }

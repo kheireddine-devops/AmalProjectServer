@@ -14,7 +14,7 @@ const EmploiSchema=Joi.object({
     id_emploi:Joi.required(),
     id_compte:Joi.required(),
     date_candidature:Joi.date().required(),
-    url_cv:Joi.string().required(),
+    // url_cv:Joi.string().required(),
     niveau:Joi.string().required(),
     message:Joi.string().required(),
 
